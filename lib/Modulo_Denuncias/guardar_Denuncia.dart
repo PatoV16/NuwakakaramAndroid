@@ -5,10 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:nuwakakaram/Modulo_Usuario/home.dart';
+import 'package:nuwakakaram/Modulo_Ubicacion/geolocator.dart';
 
 final String? uid = FirebaseAuth.instance.currentUser?.uid;
 
@@ -37,7 +38,9 @@ Future<Map<String, dynamic>> obtenerDatosUsuario(
 ) async {
   // Obtenemos los datos del documento.
   Map<String, dynamic> usuario = documento.data()! as Map<String, dynamic>;
-
+  Position position = await determinePosition();
+  double latitud = position.latitude;
+  double longitud = position.longitude;
   // Creamos un nuevo mapa con los datos que necesitamos.
   Map<String, dynamic> datosUsuario = {
     'nombre': usuario['Nombres'],
@@ -45,8 +48,9 @@ Future<Map<String, dynamic>> obtenerDatosUsuario(
     'cedula': usuario['cedula'],
     'telefono': usuario['Telefono'],
     'correo': usuario['Correo'],
-    'direccion': direccion,
-    'descripcion': descripcion.toString(),
+    'latitud': latitud,
+    'longitud': longitud,
+    'descripcion': descripcion,
     'UID': uid.toString(),
     'Hora': hora,
   };
@@ -68,7 +72,6 @@ Future<Map<String, dynamic>> obtenerDatosUsuario(
     Descripción: ${datosUsuario['descripcion']}
     UID: ${datosUsuario['UID']}
     FechaRegistro: ${datosUsuario['Hora']}''';
-  enviarCorreo(recipiente, datosUsuario);
   // Devolvemos el mapa con los datos.
 
   return datosUsuario;
@@ -94,37 +97,4 @@ Future<void> mostrarMensaje(BuildContext context, String mensaje) async {
   );
 }
 
-Future<void> enviarCorreo(String recipiente, mensaje) async {
-  String usuario = 'patrik59.pv@gmail.com';
-  String contrasena = 'vlvo zsjd cldy yqfd';
-  final smtpServer = gmail(usuario, contrasena);
-  final message = Message()
-    ..from = Address(usuario, 'mail')
-    ..recipients.add(recipiente)
-    ..subject = 'test'
-    ..text = 'Message: $mensaje';
-  try {
-    await send(message, smtpServer);
-    print('correo enviado');
-  } catch (e) {
-    print(e.toString());
-  }
-}
 
-void enviarWhatsapp() async {
-  String telefono = "+593998286593";
-  String mensaje = "ahora tambien envia whatsapp";
-
-  String url =
-      "whatsapp://send?phone=$telefono&text=${Uri.encodeComponent(mensaje)}";
-
-  try {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      print('No se pudo lanzar la URL: $url');
-    }
-  } catch (e) {
-    print('Error al lanzar la URL: $e');
-  }
-}

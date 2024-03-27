@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:geolocator/geolocator.dart';
 Future<Position> determinePosition() async{
   LocationPermission permission;
@@ -10,8 +12,21 @@ Future<Position> determinePosition() async{
   }
   return await Geolocator.getCurrentPosition();
 }
-void getCurrentPosition() async{
+Future<Position> getCurrentPosition() async{
+  Position position = await determinePosition();
+  print(position);
+  return position;
+}
+Future<double> getCurrentLatitude() async{
   Position position = await determinePosition();
   print(position.latitude);
-  print(position.longitude);
+  return position.latitude;
 }
+
+Future<double> getCurrentLongitude() async{
+  Position position = await determinePosition();
+  print(position.longitude);
+  return position.longitude;
+}
+
+

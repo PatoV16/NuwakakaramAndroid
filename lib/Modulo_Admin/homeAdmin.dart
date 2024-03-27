@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:nuwakakaram/Modulo_Admin/registroAdmin.dart';
 import 'package:nuwakakaram/Modulo_Admin/mostrarUsuarios.dart';
-import 'package:nuwakakaram/Modulo_Ubicacion/mapaScreen.dart';
 import 'package:nuwakakaram/Modulo_Ubicacion/map_screen.dart';
 import 'package:nuwakakaram/logicaLogin.dart';
 import 'contactanos.dart';
@@ -52,19 +51,7 @@ class DashboardPageA extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => RegisterAPage()),
                   );
                   break;
-                case 'Limpiar Registro':
-                  deleteDenuncias();
-                  break;
-                case 'Limpiar Usuarios':
-                  borrarUsuarios();
-                  break;
-                case 'mostrar mapa':
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MapScreen()),
-                  );
-
+                  
               }
             },
             itemBuilder: (BuildContext context) {
@@ -81,18 +68,7 @@ class DashboardPageA extends StatelessWidget {
                   value: 'Registrar otro Administrador',
                   child: Text('Registrar otro Administrador'),
                 ),
-                const PopupMenuItem(
-                  value: 'Limpiar Registro',
-                  child: Text('Limpiar Registro'),
-                ),
-                const PopupMenuItem(
-                  value: 'Limpiar Usuarios',
-                  child: Text('Limpiar usuarios'),
-                ),
-                const PopupMenuItem(
-                  value: 'mostrar mapa',
-                  child: Text('Mostrar Mapa'),
-                  )
+                
               ];
             },
           ),
@@ -147,13 +123,28 @@ class DashboardPageA extends StatelessWidget {
                       subtitle:
                           Text(denuncia['descripcion'] ?? 'Sin descripción'),
                       trailing: Icon(Icons.arrow_forward),
-                      onTap: () {
-                        // Acción al presionar una denuncia específica
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Gmaps()),
-                        );
-                      },
+                      onTap: () async {
+              // Recupera los valores de latitud y longitud (maneja la ausencia potencial)
+              double? latitud = denuncia['latitud'];
+              double? longitud = denuncia['longitud'];
+
+              // Valida la latitud y longitud antes de navegar
+              if (latitud != null && longitud != null) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MapScreen(
+                      latitud: latitud,
+                      longitud: longitud,
+                    ),
+                  ),
+                );
+              } else {
+                // Maneja datos de ubicación faltantes (por ejemplo, muestra un mensaje)
+                print('Denuncia ${index + 1} - Faltan datos de ubicación.');
+                // Considera mostrar un mensaje amigable para el usuario aquí
+              }
+            },
                     );
                   },
                 );
@@ -165,46 +156,4 @@ class DashboardPageA extends StatelessWidget {
     );
   }
 }
-
-Future<void> deleteDenuncias() async {
-  try {
-    // Obtener una referencia a la colección 'denuncias'
-    CollectionReference denuncias =
-        FirebaseFirestore.instance.collection('denuncias');
-
-    // Obtener todos los documentos en la colección 'denuncias'
-    QuerySnapshot querySnapshot = await denuncias.get();
-
-    // Iterar sobre cada documento y borrarlo
-    for (QueryDocumentSnapshot doc in querySnapshot.docs) {
-      await doc.reference.delete();
-    }
-
-    print(
-        'Todos los registros de la colección "denuncias" han sido eliminados exitosamente.');
-  } catch (e) {
-    print('Error al eliminar los registros de la colección "denuncias": $e');
-  }
-}
-
-Future<void> borrarUsuarios() async {
-  String nombreColeccion = 'usuarios';
-
-  // Crea una consulta que filtre por documentos con "Tipo: "usuario""
-  Query query = FirebaseFirestore.instance
-      .collection(nombreColeccion)
-      .where('Tipo', isEqualTo: 'usuario');
-
-  // Obtén los documentos que coinciden con la consulta
-  QuerySnapshot snapshot = await query.get();
-
-  // Itera sobre cada documento y bórralo
-  for (DocumentSnapshot doc in snapshot.docs) {
-    await doc.reference.delete();
-  }
-
-  print(
-      'Todos los documentos en la colección "$nombreColeccion" con "Tipo: "usuario"" han sido borrados.');
-}
-
 

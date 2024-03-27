@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nuwakakaram/Modulo_Admin/homeAdmin.dart';
-import 'package:nuwakakaram/Modulo_Usuario/logicaRegistro.dart';
 import 'Modulo_Usuario/home.dart';
 import 'package:nuwakakaram/main.dart';
 
@@ -70,15 +69,15 @@ class AuthService {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text('Error de inicio de sesión'),
-          content: Text('Las credenciales son incorrectas.'),
+          title: const Text('Error de inicio de sesión'),
+          content: const Text('Las credenciales son incorrectas.'),
           actions: [
             TextButton(
               onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          MyHomePage(title: 'Iniciar Sesión'))),
+                          const MyHomePage(title: 'Iniciar Sesión'))),
               child: Text('OK'),
             ),
           ],
@@ -102,11 +101,9 @@ class AuthService {
     final collectionRef = FirebaseFirestore.instance.collection("usuarios");
 
     final query = collectionRef.where('UID', isEqualTo: value);
-    var tipo;
     final querySnapshot = await query.get();
     if (querySnapshot.docs.isNotEmpty) {
-      final userData = querySnapshot.docs[0].data() as Map<String, dynamic>;
-      tipo = userData;
+      final userData = querySnapshot.docs[0].data();
       if (userData['Tipo'] == 'usuario') {
         // Redirigir al dashboard de usuario
         Navigator.push(
@@ -120,7 +117,7 @@ class AuthService {
       }
     } else {
       // Mostrar un mensaje de error de credenciales inválidas
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Credenciales inválidas. Intente nuevamente.'),
       ));
     }

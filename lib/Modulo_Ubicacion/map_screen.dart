@@ -8,7 +8,11 @@ const MAPBOX_ACCESS_TOKEN =
     'pk.eyJ1IjoicGl0bWFjIiwiYSI6ImNsY3BpeWxuczJhOTEzbnBlaW5vcnNwNzMifQ.ncTzM4bW-jpq-hUFutnR1g';
 
 class MapScreen extends StatefulWidget {
-  const MapScreen({super.key});
+   final double latitud;
+  final double longitud;
+
+  const MapScreen({super.key, required this.latitud, required this.longitud});
+
 
   @override
   State<MapScreen> createState() => _MapScreenState();
@@ -16,6 +20,7 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   LatLng? myPosition;
+  
 
   Future<Position> determinePosition() async {
     LocationPermission permission;
@@ -29,17 +34,16 @@ class _MapScreenState extends State<MapScreen> {
     return await Geolocator.getCurrentPosition();
   }
 
-  void getCurrentLocation() async {
-    Position position = await determinePosition();
+  void getLocation(double latitud, double longitud) async {
     setState(() {
-      myPosition = LatLng(position.latitude, position.longitude);
+      myPosition = LatLng(latitud, longitud);
       print(myPosition);
     });
   }
 
   @override
   void initState() {
-    getCurrentLocation();
+    getLocation(widget.latitud, widget.longitud);
     super.initState();
   }
 
