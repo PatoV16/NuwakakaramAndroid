@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nuwakakaram/logicaLogin.dart';
-import '../services/firebase_options.dart';
 
 var UID_admin = '';
 final _formKey = GlobalKey<FormState>();
@@ -31,7 +30,7 @@ void registrarDatos(
       builder: (context) {
         return AlertDialog(
           title: Text('Registrar usuario'),
-          content: Text('El usuario ha sido registrado con UID: ${user?.uid}'),
+          content: Text('El usuario ha sido registrado con UID: ${user.uid}'),
           actions: [
             TextButton(
               onPressed: () {

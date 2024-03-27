@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:nuwakakaram/main.dart';
 import 'logicaRegistro.dart';
 
 void main() {
@@ -27,23 +26,23 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF7E43B1),
+        backgroundColor: const Color(0xFF7E43B1),
         shape: const ContinuousRectangleBorder(
           borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(20.0),
           ),
         ),
         centerTitle: true,
-        title: Text(
+        title: const Text(
           'Registro de Usuario',
-          style: const TextStyle(
+          style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
@@ -54,7 +53,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 child: TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Cédula',
                     border: InputBorder.none,
                     labelStyle: TextStyle(
@@ -89,7 +88,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 child: TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Nombres',
                     border: InputBorder.none,
                     labelStyle: TextStyle(
@@ -112,7 +111,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   onSaved: (value) {
                     // Aquí puedes guardar los nombres ingresados como prefieras
                     List<String> names = value!.split(' ');
-                    _firstName = names.toString();
+                    _firstName = names.join(' ');
                     // names[0] contiene el primer nombre
                     // names[1] contiene el segundo nombre (si está presente)
                   },
@@ -128,7 +127,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 child: TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Apellidos',
                     border: InputBorder.none,
                     labelStyle: TextStyle(
@@ -150,7 +149,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   },
                   onSaved: (value) {
                     List<String> lasts = value!.split(' ');
-                    _lastName = lasts.toString();
+                    _lastName = lasts.join(' ');
                   },
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp(r'^[a-zA-Z\s]+$')),
@@ -164,7 +163,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 child: TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Correo electrónico',
                     border: InputBorder.none,
                     labelStyle: TextStyle(
@@ -199,7 +198,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 child: TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Contraseña',
                     border: InputBorder.none,
                     labelStyle: TextStyle(
@@ -232,7 +231,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 child: TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Teléfono',
                     border: InputBorder.none,
                     labelStyle: TextStyle(
@@ -258,7 +257,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               const SizedBox(height: 10.0),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
@@ -267,7 +266,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         _password, _telefono, context);
                   }
                 },
-                child: Text('Ingresar Datos'),
+                child: const Text('Ingresar Datos'),
               ),
             ],
           ),

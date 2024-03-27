@@ -1,14 +1,9 @@
 // ignore_for_file: deprecated_member_use
 
-import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:mailer/mailer.dart';
-import 'package:mailer/smtp_server.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:nuwakakaram/Modulo_Ubicacion/geolocator.dart';
 
 final String? uid = FirebaseAuth.instance.currentUser?.uid;
@@ -60,19 +55,6 @@ Future<Map<String, dynamic>> obtenerDatosUsuario(
 
   // Agregamos los datos del usuario al documento.
   await document.set(datosUsuario);
-
-  // Formateamos los datos del usuario como una cadena de texto.
-  String datosUsuarioTexto = '''
-    Nombre: ${datosUsuario['nombre']}
-    Apellido: ${datosUsuario['apellido']}
-    Cedula: ${datosUsuario['cedula']}
-    Teléfono: ${datosUsuario['telefono']}
-    Correo: ${datosUsuario['correo']}
-    Dirección: ${datosUsuario['direccion']}
-    Descripción: ${datosUsuario['descripcion']}
-    UID: ${datosUsuario['UID']}
-    FechaRegistro: ${datosUsuario['Hora']}''';
-  // Devolvemos el mapa con los datos.
 
   return datosUsuario;
 }

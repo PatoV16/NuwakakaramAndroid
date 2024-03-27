@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nuwakakaram/Modulo_Admin/homeAdmin.dart';
 import '../services/firebase_options.dart';
-import '../main.dart';
 import 'logicaAdmin.dart';
 
 void main() async {

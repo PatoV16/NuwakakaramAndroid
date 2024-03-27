@@ -5,6 +5,7 @@ import 'package:nuwakakaram/Modulo_Admin/mostrarUsuarios.dart';
 import 'package:nuwakakaram/Modulo_Ubicacion/map_screen.dart';
 import 'package:nuwakakaram/logicaLogin.dart';
 import 'contactanos.dart';
+import 'package:flutter/cupertino.dart';
 //port 'package:nuwakakaram/Modulo_Ubicacion/mapaScreen.dart';
 
 
@@ -119,12 +120,36 @@ class DashboardPageA extends StatelessWidget {
                         denuncias[index].data() as Map<String, dynamic>;
 
                     return ListTile(
-                      title: Text('Denuncia ${index + 1}'),
+                      title: Text(denuncia['nombre']+denuncia['apellido']),
                       subtitle:
                           Text(denuncia['descripcion'] ?? 'Sin descripción'),
                       trailing: Icon(Icons.arrow_forward),
                       onTap: () async {
               // Recupera los valores de latitud y longitud (maneja la ausencia potencial)
+                            showContextMenu(context, denuncia);
+                                    },
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+ void showContextMenu(BuildContext context, denuncia) {
+  showCupertinoDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return CupertinoAlertDialog(
+        title: Text(denuncia['nombre']+denuncia['apellido']),
+        content: Text(denuncia['cedula']),
+        actions: <Widget>[
+          CupertinoDialogAction(
+            child: Text('Ver Mapa'),
+            onPressed: () {
+              // Código para cuando se presiona "Ver Mapa"
               double? latitud = denuncia['latitud'];
               double? longitud = denuncia['longitud'];
 
@@ -141,19 +166,26 @@ class DashboardPageA extends StatelessWidget {
                 );
               } else {
                 // Maneja datos de ubicación faltantes (por ejemplo, muestra un mensaje)
-                print('Denuncia ${index + 1} - Faltan datos de ubicación.');
+                print(' Faltan datos de ubicación.');
                 // Considera mostrar un mensaje amigable para el usuario aquí
+                Navigator.pop(context);
               }
+              
             },
-                    );
-                  },
-                );
-              },
-            ),
+          ),
+          CupertinoDialogAction(
+            child: Text('Atender'),
+            onPressed: () {
+              
+              // Código para cuando se presiona "Atender"
+              print('Atender');
+              Navigator.pop(context);
+            },
           ),
         ],
-      ),
-    );
-  }
+      );
+    },
+  );
+}
 }
 

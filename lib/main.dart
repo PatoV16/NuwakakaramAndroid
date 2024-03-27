@@ -7,7 +7,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'services/firebase_options.dart';
 import 'package:nuwakakaram/logicaLogin.dart';
 import "package:nuwakakaram/services/notification_services.dart";
-import 'Modulo_Ubicacion/map_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:geolocator/geolocator.dart';
 Future<Position> determinePosition() async{

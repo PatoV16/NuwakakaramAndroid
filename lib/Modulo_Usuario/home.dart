@@ -2,16 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:nuwakakaram/Modulo_Usuario/pdf_view.dart';
 import 'package:nuwakakaram/logicaLogin.dart';
 import 'perfilUser.dart';
 import 'package:nuwakakaram/Modulo_Denuncias/mis_Denuncias.dart';
 import 'package:nuwakakaram/Modulo_Denuncias/guardar_Denuncia.dart';
-import 'package:nuwakakaram/Modulo_Ubicacion/geolocator.dart';
 
 bool confirmacion = false;
 
+// ignore: must_be_immutable
 class DashboardPage extends StatelessWidget {
   String receptor = 'greysvilla99@gmail.com';
   final AuthService authService = AuthService();
@@ -293,8 +292,7 @@ Future<void> mostrarConfirmacion(
         actions: <Widget>[
           CupertinoDialogAction(
             onPressed: () async {
-              String hora =
-                  DateTime.fromMicrosecondsSinceEpoch(1644931200000).toString();
+              String hora = DateTime.now().toString();
               DocumentSnapshot<Object?> documentoSnapshot =
                   await buscarUsuario(uid.toString());
               if (documentoSnapshot.exists) {

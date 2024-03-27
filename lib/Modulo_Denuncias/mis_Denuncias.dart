@@ -28,21 +28,25 @@ class ListaDenunciasScreen extends StatelessWidget {
 
           if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
             return ListView.builder(
-              itemCount: snapshot.data!.docs.length,
-              itemBuilder: (context, index) {
-                var document = snapshot.data!.docs[index];
-                var denuncia =
-                    Denuncia.fromMap(document.data() as Map<String, dynamic>);
-                return ListTile(
-                  title: Text(denuncia.titulo),
-                  subtitle: Text(denuncia.descripcion),
-                  
-                  onTap: () {
-                    // Aquí puedes agregar la lógica para mostrar más detalles de la denuncia
-                  },
-                );
-              },
-            );
+  itemCount: snapshot.data!.docs.length,
+  itemBuilder: (context, index) {
+    var document = snapshot.data!.docs[index];
+    var denuncia = Denuncia.fromMap(document.data() as Map<String, dynamic>);
+    return Column(
+      children: [
+        ListTile(
+          title: Text(denuncia.titulo),
+          subtitle: Text(denuncia.descripcion),
+          onTap: () {
+            // Aquí puedes agregar la lógica para mostrar más detalles de la denuncia
+          },
+        ),
+        Divider(), // Agregar un Divider después de cada ListTile
+      ],
+    );
+  },
+);
+
           }
 
           return Center(child: Text('No hay denuncias disponibles'));
@@ -60,7 +64,7 @@ class Denuncia {
 
   factory Denuncia.fromMap(Map<String, dynamic> map) {
     return Denuncia(
-      map['titulo'] ?? '',
+      map['nombre'] ?? '',
       map['descripcion'] ?? '',
     );
   }

@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'dart:typed_data';
+import 'package:nuwakakaram/main.dart';
 
 import '../logicaLogin.dart';
 
@@ -28,14 +27,17 @@ Future<void> guardarDatos(String cedula, String firstName, String lastName,
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Usuario registrado'),
+          title: const Text('Usuario registrado'),
           content: Text('El usuario ha sido registrado con UID: ${user?.uid}'),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const MyHomePage(title: 'Iniciar Sesión')));
               },
-              child: Text('Aceptar'),
+              child: const Text('Aceptar'),
             ),
           ],
         );
@@ -47,14 +49,14 @@ Future<void> guardarDatos(String cedula, String firstName, String lastName,
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Error al registrar el usuario'),
+          title: const Text('Error al registrar el usuario'),
           content: Text('El usuario no se ha podido registrar: $error'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Aceptar'),
+              child: const Text('Aceptar'),
             ),
           ],
         );

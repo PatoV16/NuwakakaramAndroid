@@ -7,6 +7,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:nuwakakaram/Modulo_Usuario/pdf_view.dart';
 import 'package:file_picker/file_picker.dart';
 
+
+// ignore: must_be_immutable
 class ProfilePage extends StatelessWidget {
   final String? uid = FirebaseAuth.instance.currentUser?.uid;
   final TextEditingController nombreController = TextEditingController();
@@ -19,7 +21,6 @@ class ProfilePage extends StatelessWidget {
 
   ProfilePage({super.key});
 
-  @override
   ProfilePage createState() => ProfilePage();
 
   @override
@@ -29,7 +30,7 @@ class ProfilePage extends StatelessWidget {
       builder:
           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         }
         if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
@@ -39,7 +40,7 @@ class ProfilePage extends StatelessWidget {
         url = snapshot.data?['imageURL'] ?? '';
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: Color(0xFF7E43B1),
+            backgroundColor: const Color(0xFF7E43B1),
             title: const Text(
               'Perfil',
               style: TextStyle(
@@ -48,7 +49,7 @@ class ProfilePage extends StatelessWidget {
               ),
             ),
             leading: IconButton(
-              icon: Icon(Icons.arrow_back, color: Colors.white),
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -61,20 +62,20 @@ class ProfilePage extends StatelessWidget {
                 GestureDetector(
                   onTap: () async {
                     // Sube la imagen y luego carga la URL de descarga
-                    uploadImage();
+                    uploadImage(context);
                     //final url = await buscarImagenUsuario(uid.toString());
                     print(url);
                   },
                   child: CircleAvatar(
                     radius: 50,
                     backgroundImage: NetworkImage(url),
-                    child: Icon(
+                    child: const Icon(
                       Icons.edit,
                       color: Colors.black,
                     ),
                   ),
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 Align(
                   alignment: Alignment.bottomLeft,
                   child: _buildEditableText(
@@ -89,7 +90,7 @@ class ProfilePage extends StatelessWidget {
                   onPressed: () {
                     uploadPDF(uid.toString(), context);
                   },
-                  child: Text('Subir PDF'),
+                  child: const Text('Subir PDF'),
                 ),
               ],
             ),
@@ -125,20 +126,20 @@ class ProfilePage extends StatelessWidget {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: Text('Cancelar'),
+                      child: const Text('Cancelar'),
                     ),
                     TextButton(
                       onPressed: () async {
                         // Actualiza el valor en Firestore
-                        nuevoValor = newcontroller!.text;
+                        nuevoValor = newcontroller.text;
 
-                        if (nuevoValor != null && nuevoValor.isNotEmpty) {
+                        if (nuevoValor.isNotEmpty) {
                           print(nuevoValor);
                           await actualizarValor(label, nuevoValor);
                         } else {
                           // Muestra un mensaje de error al usuario
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
+                            const SnackBar(
                               content: Text('Debes introducir un valor válido'),
                             ),
                           );
@@ -146,7 +147,7 @@ class ProfilePage extends StatelessWidget {
 
                         Navigator.pop(context);
                       },
-                      child: Text('Guardar'),
+                      child: const Text('Guardar'),
                     ),
                   ],
                 );
@@ -157,11 +158,11 @@ class ProfilePage extends StatelessWidget {
             children: [
               Text(
                 value,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16.0,
                 ),
               ),
-              Icon(Icons.edit),
+              const Icon(Icons.edit),
             ],
           ),
         ),
@@ -175,7 +176,6 @@ class ProfilePage extends StatelessWidget {
         FirebaseFirestore.instance.collection('usuarios');
     QuerySnapshot usuariosEncontrados =
         await usuarios.where('UID', isEqualTo: uid).get();
-    print(uid);
     if (usuariosEncontrados.docs.isNotEmpty) {
       DocumentSnapshot usuario = usuariosEncontrados.docs.first;
       String documentoId = usuario.id;
@@ -196,35 +196,59 @@ class ProfilePage extends StatelessWidget {
   }
 
 //solo debe subir una imagen
-  Future<void> uploadImage() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    String cedula = '';
-    cedula = await buscarCedulaUsuario(Auth.uid, 'cedula');
-    if (pickedFile == null) return; // El usuario canceló la selección
+ Future<void> uploadImage(BuildContext context) async {
+  final pickedFile =
+      await ImagePicker().pickImage(source: ImageSource.gallery);
+  String cedula = '';
+  cedula = await buscarCedulaUsuario(Auth.uid, 'cedula');
+  if (pickedFile == null) return; // El usuario canceló la selección
 
-    // Obtiene una referencia al Storage de Firebase
-    final ref = FirebaseStorage.instance
-        .ref()
-        .child('images')
-        .child(cedula)
-        .child('profilePicture_' + cedula + '.jpg');
+  // Obtiene una referencia al Storage de Firebase
+  final ref = FirebaseStorage.instance
+      .ref()
+      .child('images')
+      .child(cedula)
+      .child('profilePicture_' + cedula + '.jpg');
 
-    // Sube la imagen
-    try {
-      await ref.putFile(File(pickedFile.path));
-      String imageUrl = await ref.getDownloadURL();
-      actualizarValor('imageURL', imageUrl);
-      print('Imagen subida a: $imageUrl');
-    } catch (error) {
-      // Se ha producido un error al subir la imagen
-      print('Se ha producido un error al subir la imagen: $error');
-    }
+  // Muestra un cuadro de diálogo de progreso
+  showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const AlertDialog(
+        title: Text('Subiendo imagen'),
+        content: LinearProgressIndicator(),
+      ));
+
+  // Sube la imagen
+  try {
+    await ref.putFile(File(pickedFile.path));
+    String imageUrl = await ref.getDownloadURL();
+    actualizarValor('imageURL', imageUrl);
+    // Cierra el cuadro de diálogo
+    // ignore: unnecessary_cast
+    Navigator.of(context as BuildContext).pop();
+    // Muestra un mensaje de éxito
+    mostrarSnackBar('Imagen subida correctamente', context);
+  } catch (error) {
+    // Se ha producido un error al subir la imagen
+    Navigator.of(context).pop();
+    // Muestra un mensaje de error
+    mostrarSnackBar('Se ha producido un error al subir la imagen: $error',context);
   }
+}
+void mostrarSnackBar(String mensaje, BuildContext context) {
+  ScaffoldMessenger.of(context ).showSnackBar(
+    SnackBar(
+      content: Text(mensaje),
+      duration: const Duration(seconds: 2),
+    ),
+  );
+}
+
 
 //controlar que solo se suba una vez el archivo por cada usuario
 
-  Future<void> uploadPDF(String _uid, context) async {
+  Future<void> uploadPDF(String _uid, BuildContext context) async {
     final picker = FilePicker.platform;
     final FilePickerResult? pickedFile = await picker.pickFiles(
       type: FileType.custom,
@@ -253,17 +277,18 @@ class ProfilePage extends StatelessWidget {
           await uploadTask.whenComplete(() async {
             final url = await reference.getDownloadURL();
             print('URL de descarga: $url');
+            mostrarSnackBar('Archivo Subido correctamente', context);
             // Aquí puedes usar la URL para mostrar un enlace de descarga o realizar otras acciones
             actualizarValor('pdfURL', url);
           });
         } catch (e) {
-          print('Error al subir PDF: $e');
+          mostrarSnackBar('Error al subir PDF: $e', context);
         }
       } else {
-        print('No se seleccionó ningún archivo PDF');
+        mostrarSnackBar('No se seleccionó ningún archivo PDF', context);
       }
     } else {
-      print('No se seleccionó ningún archivo PDF');
+      mostrarSnackBar('No se seleccionó ningún archivo PDF', context);
     }
   }
 
