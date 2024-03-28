@@ -53,33 +53,37 @@ class _RegisterPageState extends State<RegisterPage> {
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 child: TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Cédula',
-                    border: InputBorder.none,
-                    labelStyle: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.0,
-                    ),
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
-                    prefixIcon: Icon(
-                      Icons.perm_identity,
-                      color: Colors.white,
-                    ),
-                  ),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                  ],
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Por favor, ingresa tu cédula';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    _cedula = value!;
-                  },
-                ),
+  decoration: const InputDecoration(
+    labelText: 'Cédula',
+    border: InputBorder.none,
+    labelStyle: TextStyle(
+      color: Colors.white,
+      fontSize: 16.0,
+    ),
+    contentPadding:
+        EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
+    prefixIcon: Icon(
+      Icons.perm_identity,
+      color: Colors.white,
+    ),
+  ),
+  inputFormatters: [
+    FilteringTextInputFormatter.digitsOnly,
+  ],
+  validator: (value) {
+    if (value!.isEmpty) {
+      return 'Por favor, ingresa tu cédula';
+    }
+    if (!validarCedulaEcuatoriana(value)) {
+      return 'La cédula no es válida';
+    }
+    return null;
+  },
+  onSaved: (value) {
+    _cedula = value!;
+  },
+),
+
               ),
               const SizedBox(height: 10.0),
               Container(
@@ -274,4 +278,23 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
   }
+  bool validarCedulaEcuatoriana(String cedula) {
+  if (cedula.length != 10) {
+    return false; // La cédula debe tener 10 dígitos
+  }
+
+  int suma = 0;
+  for (int i = 0; i < 9; i++) {
+    int digito = int.parse(cedula[i]);
+    int multiplicador = (i % 2 == 0) ? 2 : 1;
+    int resultado = digito * multiplicador;
+    suma += (resultado >= 10) ? resultado - 9 : resultado;
+  }
+
+  int residuo = suma % 10;
+  int digitoVerificador = int.parse(cedula[9]);
+
+  return (residuo == 0 && digitoVerificador == 0) || (10 - residuo == digitoVerificador);
+}
+
 }
