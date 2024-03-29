@@ -1,4 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -108,4 +112,66 @@ class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
       ),
     );
   }
+
+
+Future<void> sendEmail(String recipientEmail, String subject, String body) async {
+  String username = 'patrik59.pv@gmail.com'; // Tu correo electrónico
+  String password = 'jmuf mvad kavd sjii'; // Tu contraseña de correo electrónico
+
+  final smtpServer = gmail(username, password);
+
+  final message = Message()
+    ..from = Address(username)
+    ..recipients.add(recipientEmail)
+    ..subject = subject
+    ..text = body;
+
+  try {
+    final sendReport = await send(message, smtpServer);
+    print('Email sent: ${sendReport.toString()}');
+  } catch (e) {
+    print('Error sending email: $e');
+  }
 }
+Future<DocumentSnapshot> buscarDocumento( String valor) async {
+   String campo = 'cedula';
+  // Obtener la referencia a la colección
+  final coleccion = FirebaseFirestore.instance.collection('usuarios');
+
+  // Crear la consulta
+  final consulta = coleccion.where(campo, isEqualTo: valor);
+
+  // Obtener el documento
+  final documento = await consulta.get().then((snapshot) => snapshot.docs.first);
+
+  // Retornar el documento
+  return documento;
+}
+
+Future<bool?> confirmarCambioContrasena(BuildContext context) async {
+  return await showCupertinoDialog<bool>(
+    context: context,
+    builder: (context) => CupertinoAlertDialog(
+      title: Text('Confirmar cambio de contraseña'),
+      content: Text('¿Estás seguro de que deseas solicitar un cambio de contraseña?'),
+      actions: <Widget>[
+        CupertinoDialogAction(
+          child: Text('Cancelar'),
+          onPressed: () { 
+            Navigator.pop(context, false);
+            },
+        ),
+        CupertinoDialogAction(
+          child: Text('Solicitar cambio'),
+          onPressed: () {
+            
+          },
+        ),
+      ],
+    ),
+  );
+}
+
+
+}
+//aqui poner el mailer

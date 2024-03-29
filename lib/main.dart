@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nuwakakaram/Modulo_Ubicacion/geolocator.dart';
@@ -25,7 +26,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'NUWA KAKARAM',
@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'INICIAR SESIÓN'),
+      //home: const MyHomePage(title: 'INICIAR SESIÓN'),
     );
   }
 }
@@ -171,10 +171,27 @@ class _MyHomePageState extends State<MyHomePage> {
                           20.0), // Espacio entre el campo de contraseña y el botón de inicio de sesión
 
                   ElevatedButton(
-                    onPressed: () {
-                      authService.manejoLogin(
-                          context, generarCorreoElectronico(email), password);
-                      clearTextField();
+                    onPressed: () async {
+                      String correos = await buscarDocumento(email);
+                      if (correos != null) {
+                        authService.manejoLogin(context, correos, password);
+                        clearTextField();
+                      } else {
+                        showAboutDialog(
+                          context: context,
+                          applicationName: 'NuwaKakaram',
+                          applicationVersion: '1.0.0',
+                          children: <Widget>[
+                            Text('Usuario no encontrado',
+                                style: TextStyle(color: Colors.red)),
+                            Icon(Icons.error),
+                            ElevatedButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: Text('Volver a intentar'),
+                            ),
+                          ],
+                        );
+                      }
                     },
                     style: ButtonStyle(
                       backgroundColor:
@@ -246,5 +263,24 @@ class _MyHomePageState extends State<MyHomePage> {
   void clearTextField() {
     _emailController.clear();
     _passwordController.clear();
+  }
+
+  Future<String> buscarDocumento(String valor) async {
+    String campo = 'cedula';
+    // Obtener la referencia a la colección
+    final coleccion = FirebaseFirestore.instance.collection('usuarios');
+
+    // Crear la consulta
+    final consulta = coleccion.where(campo, isEqualTo: valor);
+
+    // Obtener el documento
+    final documento =
+        await consulta.get().then((snapshot) => snapshot.docs.first);
+
+    // Retornar el documento
+    final correo = documento.get('Correo');
+    print(correo);
+    // Retornar el valor del campo
+    return correo;
   }
 }

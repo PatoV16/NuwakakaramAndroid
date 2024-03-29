@@ -3,54 +3,47 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nuwakakaram/main.dart';
 
-import '../logicaLogin.dart';
-
-var UID;
+String UID = '';
+Map<String, dynamic> data = {};
 // Esta función guarda los datos en una colección llamada `usuarios` en Firestore.
+Future<bool> existeUsuario(String cedula) async {
+  // Obtener la referencia a la colección
+  final coleccion = FirebaseFirestore.instance.collection('usuarios');
+
+  // Crear la consulta
+  final consulta = coleccion.where('cedula', isEqualTo: cedula);
+
+  // Obtener el documento
+  final snapshot = await consulta.get();
+
+  // Retornar true si el documento existe, false si no
+  return snapshot?.docs?.isNotEmpty ?? false;
+}
+
+Future<String> creaeUserAuth(String correo, password) async {
+  // Crear usuario en Firebase Auth
+  UserCredential userCredential =
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+    email: correo,
+    password: password,
+  );
+  User? user = userCredential.user;
+  UID = user!.uid;
+  return UID;
+}
+
+//----------------------------------------------------------------
 Future<void> guardarDatos(String cedula, String firstName, String lastName,
     String correo, String password, String telefono, context) async {
   final firestore = FirebaseFirestore.instance;
-  try {
-    // Usa el método set para guardar los datos en Firebase Auth.
-    UserCredential userCredential =
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-      email: generarCorreoElectronico(cedula),
-      password: password,
-    );
-
-    // El usuario se ha registrado exitosamente
-    User? user = userCredential.user;
-    UID = user?.uid;
-
-    // Despliega un cuadro de texto con el UID del usuario
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Usuario registrado'),
-          content: Text('El usuario ha sido registrado con éxito'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const MyHomePage(title: 'Iniciar Sesión')));
-              },
-              child: const Text('Aceptar'),
-            ),
-          ],
-        );
-      },
-    );
-  } catch (error) {
-    // Ocurrió un error durante el registro de usuario
+  // Verificar si el usuario ya existe
+  if (await existeUsuario(cedula) == true) {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
           title: const Text('Error al registrar el usuario'),
-          content: Text('El usuario no se ha podido registrar: $error'),
+          content: Text('Ya existe un usuario con la misma cédula.'),
           actions: [
             TextButton(
               onPressed: () {
@@ -62,28 +55,47 @@ Future<void> guardarDatos(String cedula, String firstName, String lastName,
         );
       },
     );
-  }
-  Map<String, dynamic> data = {
-    'Nombres': firstName,
-    'Apellidos': lastName,
-    'Correo': correo,
-    'Telefono': telefono,
-    'Contraseña': password,
-    'cedula': cedula,
-    'UID': UID,
-    'Tipo': 'usuario',
-    'imageURL': 'null',
-    'pdfURL': 'null'
-  };
-
-  // Utiliza try-catch para manejar cualquier excepción que pueda ocurrir al intentar guardar los datos.
-  try {
-    // Usa el método set para guardar los datos en Firestore.
+  }else {
+    
+     UID = await creaeUserAuth(correo, password);
+    // Guardar datos en Firestore
+    data = {
+      'Nombres': firstName,
+      'Apellidos': lastName,
+      'Correo': correo,
+      'Telefono': telefono,
+      'Contraseña': password,
+      'cedula': cedula,
+      'UID': UID,
+      'Tipo': 'usuario',
+      'imageURL': 'null',
+      'pdfURL': 'null',
+      'estado': 'null',
+    };
     await firestore.collection('usuarios').add(data);
-    print('Los datos se guardaron correctamente');
-    //crearCarpeta(cedula);
-  } catch (error) {
-    print('No se pudo guardar los datos');
-  }
+   
+  // Mostrar mensaje de éxito
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text('Usuario registrado'),
+        content: Text('El usuario ha sido registrado con éxito'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          const MyHomePage(title: 'Iniciar Sesión')));
+            },
+            child: const Text('Aceptar'),
+          ),
+        ],
+      );
+    },
+  );
 }
-
+    
+  } 

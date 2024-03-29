@@ -23,6 +23,7 @@ class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //profileImageUrl = objetoBuscar.buscarCedulaUsuario(Auth.uid, 'imageURL') as String;
+    
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
