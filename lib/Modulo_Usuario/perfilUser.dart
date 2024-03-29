@@ -84,91 +84,117 @@ class ProfilePage extends StatelessWidget {
                 Align(
                   alignment: Alignment.bottomLeft,
                   child: _buildEditableText(
-                      'Telefono', telefono, telefonoController, context),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    uploadPDF(uid.toString(), context);
-                  },
-                  child: const Text('Subir PDF'),
+                      'Teléfono', telefono, telefonoController, context),
                 ),
               ],
             ),
           ),
+          floatingActionButton: FloatingActionButton(
+    onPressed: () {
+      // Acción al presionar el botón flotante
+      uploadPDF(uid.toString(), context);
+    },
+    child: Icon(Icons.document_scanner), // Icono del botón flotante
+    backgroundColor: Colors.blue, // Color de fondo del botón flotante
+    foregroundColor: Colors.white, // Color del icono del botón flotante
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(50.0), // Forma del botón flotante
+    ),
+  ),
+  floatingActionButtonLocation: FloatingActionButtonLocation.endFloat, // Ubicación del botón flotante en la esquina inferior derecha
         );
+        
       },
     );
   }
 
-  Widget _buildEditableText(String label, String value, controller, context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          '$label: ',
-          style: const TextStyle(
-            fontSize: 16.0,
-            fontWeight: FontWeight.bold,
-          ),
+  Widget _buildEditableText(String label, String value, TextEditingController controller, context) {
+  bool esCorreoValido = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value);
+  bool esTelefonoValido = RegExp(r'^\d{10}$').hasMatch(value);
+
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Text(
+        '$label: ',
+        style: const TextStyle(
+          fontSize: 16.0,
+          fontWeight: FontWeight.bold,
         ),
-        GestureDetector(
-          onTap: () {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: Text('Editar $label'),
-                  content: TextField(
-                    controller: newcontroller,
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text('Cancelar'),
-                    ),
-                    TextButton(
-                      onPressed: () async {
-                        // Actualiza el valor en Firestore
-                        nuevoValor = newcontroller.text;
+      ),
+      GestureDetector(
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (context) {
+              TextEditingController newController = TextEditingController();
+              newController.text = value;
 
-                        if (nuevoValor.isNotEmpty) {
-                          print(nuevoValor);
-                          await actualizarValor(label, nuevoValor);
-                        } else {
-                          // Muestra un mensaje de error al usuario
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Debes introducir un valor válido'),
-                            ),
-                          );
-                        }
-
-                        Navigator.pop(context);
-                      },
-                      child: const Text('Guardar'),
-                    ),
-                  ],
-                );
-              },
-            );
-          },
-          child: Row(
-            children: [
-              Text(
-                value,
-                style: const TextStyle(
-                  fontSize: 16.0,
+              return AlertDialog(
+                title: Text('Editar $label'),
+                content: TextField(
+                  controller: newController,
                 ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Cancelar'),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      // Validar el nuevo valor
+                      String nuevoValor = newController.text;
+                      bool esNuevoValorValido =
+                          (label == 'Correo' && validarCorreo(nuevoValor)) ||
+                          (label == 'Telefono' && validarTelefono(nuevoValor));
+
+                      if (esNuevoValorValido) {
+                        print(nuevoValor);
+                        await actualizarValor(label, nuevoValor);
+                      } else {
+                        // Mostrar un mensaje de error al usuario
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Debes introducir un valor válido'),
+                          ),
+                        );
+                      }
+
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Guardar'),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+        child: Row(
+          children: [
+            Text(
+              value,
+              style: TextStyle(
+                fontSize: 16.0,
+                color: esCorreoValido || esTelefonoValido ? Colors.black : Colors.red, // Cambiar el color del texto si no es válido
               ),
-              const Icon(Icons.edit),
-            ],
-          ),
+            ),
+            const Icon(Icons.edit),
+          ],
         ),
-      ],
-    );
-  }
+      ),
+    ],
+  );
+}
+
+bool validarCorreo(String correo) {
+  return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(correo);
+}
+
+bool validarTelefono(String telefono) {
+  return RegExp(r'^\d{10}$').hasMatch(telefono);
+}
 
   Future<void> actualizarValor(String campo, String nuevoValor) async {
     final String uid = FirebaseAuth.instance.currentUser!.uid;

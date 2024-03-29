@@ -28,7 +28,7 @@ Future<void> guardarDatos(String cedula, String firstName, String lastName,
       builder: (context) {
         return AlertDialog(
           title: const Text('Usuario registrado'),
-          content: Text('El usuario ha sido registrado con UID: ${user?.uid}'),
+          content: Text('El usuario ha sido registrado con éxito'),
           actions: [
             TextButton(
               onPressed: () {

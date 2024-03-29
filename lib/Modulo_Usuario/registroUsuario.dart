@@ -202,31 +202,36 @@ class _RegisterPageState extends State<RegisterPage> {
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 child: TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Contraseña',
-                    border: InputBorder.none,
-                    labelStyle: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.0,
-                    ),
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
-                    prefixIcon: Icon(
-                      Icons.password,
-                      color: Colors.white,
-                    ),
-                  ),
-                  obscureText: true,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Por favor, ingresa tu contraseña';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    _password = value!;
-                  },
-                ),
+  maxLength: 8,
+  maxLengthEnforcement: MaxLengthEnforcement.enforced, // Limite estricto
+  decoration: const InputDecoration(
+    labelText: 'Contraseña',
+    border: InputBorder.none,
+    labelStyle: TextStyle(
+      color: Colors.white,
+      fontSize: 16.0,
+    ),
+    contentPadding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 16.0),
+    prefixIcon: Icon(
+      Icons.password,
+      color: Colors.white,
+    ),
+  ),
+  obscureText: true,
+  validator: (valor) {
+    if (valor!.isEmpty) {
+      return 'Por favor, ingresa tu contraseña';
+    } else if (valor.length < 8) {
+      return 'La contraseña debe tener al menos 8 caracteres';
+    } else if (!RegExp(r'[a-zA-Z0-9]').hasMatch(valor)) {
+      return 'La contraseña debe contener solo números y letras (opcional)'; // Elimine esta parte si no lo necesita
+    }
+    return null; // Sin errores
+  },
+  onSaved: (valor) {
+    _password = valor!;
+  },
+),
               ),
               const SizedBox(height: 10.0),
               Container(
@@ -235,6 +240,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 child: TextFormField(
+                  maxLength: 10,
                   decoration: const InputDecoration(
                     labelText: 'Teléfono',
                     border: InputBorder.none,
@@ -249,12 +255,14 @@ class _RegisterPageState extends State<RegisterPage> {
                       color: Colors.white,
                     ),
                   ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Por favor, ingresa tu teléfono';
-                    }
-                    return null;
-                  },
+                 validator: (value) {
+  if (value!.isEmpty) {
+    return 'Por favor, ingresa tu teléfono';
+  } else if (!RegExp(r'^0[0-9]+$').hasMatch(value)) {
+    return 'Ingresa solo números';
+  }
+  return null;
+},
                   onSaved: (value) {
                     _telefono = value!;
                   },

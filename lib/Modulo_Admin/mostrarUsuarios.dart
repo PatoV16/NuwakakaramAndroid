@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -47,7 +48,73 @@ class _getUsersAllState extends State<getUsersAll> {
                   title: Text(
                       'Nombre: ${usuario['Nombres']} ${usuario['Apellidos']}'),
                   subtitle: Text('Cédula: ${usuario['cedula']}'),
-                 // trailing: Text('Contraseña: ${usuario['contraseña']}'),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.edit),
+                         onPressed: () async {
+                            final usuario = snapshot.data![index];
+    final uid = usuario['UID']; // Suponiendo que el campo UID existe
+
+    // Muestra un diálogo de confirmación
+    final confirm = await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Confirmar deshabilitación'),
+        content: Text('¿Seguro que desea deshabilitar a este usuario?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text('Deshabilitar'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm) {
+      handleAccount('estado', 'deshabilitado', uid);
+    }
+                       
+                        },
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () async {
+                            final usuario = snapshot.data![index];
+    final uid = usuario['UID']; // Suponiendo que el campo UID existe
+
+    // Muestra un diálogo de confirmación
+    final confirm = await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Confirmar la eliminación de la cuenta'),
+        content: Text('¿Seguro que desea eliminar a este usuario?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text('Eliminar'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm) {
+      eliminarUsuario(uid);
+    }
+                       
+                        },
+                      ),
+                    ],
+                  ),
                 );
               },
             );
@@ -58,4 +125,83 @@ class _getUsersAllState extends State<getUsersAll> {
       ),
     );
   }
+/*
+Future<void> eliminarUsuario(String UID) async {
+  try {
+    // Reemplaza "coleccion" con el nombre real de tu colección
+    final collectionRef = FirebaseFirestore.instance.collection('coleccion');
+    final docRef = collectionRef.doc(UID);
+
+    await docRef.delete();
+
+    // Actualiza la lista de usuarios localmente (opcional)
+    if (mounted) {
+      setState(() {
+        getUsuarios();
+      });
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Usuario eliminado correctamente')),
+    );
+  } catch (error) {
+    print('Error al eliminar el usuario: $error');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error al eliminar el usuario')),
+    );
+  }
+}*/
+
+Future<void> eliminarUsuario(dynamic valorCampo) async {
+  String nombreCampo = 'UID';
+  try {
+    // Referencia a la colección donde se buscará el documento
+    final collectionRef = FirebaseFirestore.instance.collection('usuarios');
+
+    // Consulta para buscar el documento por el campo especificado
+    final querySnapshot = await collectionRef.where(nombreCampo, isEqualTo: valorCampo).get();
+
+    // Verificar si se encontraron documentos que coincidan con la consulta
+    if (querySnapshot.docs.isNotEmpty) {
+      // Eliminar el primer documento que coincida (puedes ajustar la lógica según tus necesidades)
+      final docRef = querySnapshot.docs.first.reference;
+      await docRef.delete();
+       if (mounted) {
+      setState(() {
+        getUsuarios();
+      });
+    }
+      ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Usuario eliminado correctamente')),
+    );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('No se encontraron documentos que coincidan con la consulta.')),
+    );
+    }
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error al eliminar el usuario')),
+    );
+  }
 }
+
+Future<void> handleAccount(String campo, String nuevoValor, uid) async {
+    
+    CollectionReference usuarios =
+        FirebaseFirestore.instance.collection('usuarios');
+    QuerySnapshot usuariosEncontrados =
+        await usuarios.where('UID', isEqualTo: uid).get();
+    if (usuariosEncontrados.docs.isNotEmpty) {
+      DocumentSnapshot usuario = usuariosEncontrados.docs.first;
+      String documentoId = usuario.id;
+
+      await usuarios.doc(documentoId).update({
+        campo: nuevoValor,
+      });
+    }
+  }
+
+
+}
+
