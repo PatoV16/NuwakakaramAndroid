@@ -64,8 +64,8 @@ void registrarDatos(
   try {
     // Crea un mapa con los datos a guardar en Firestore
     Map<String, dynamic> userData = {
-      'Nombre': firstName,
-      'Apellido': lastName,
+      'Nombres': firstName,
+      'Apellidos': lastName,
       'contraseña': password,
       'Correo': email,
       'cedula': cedula,

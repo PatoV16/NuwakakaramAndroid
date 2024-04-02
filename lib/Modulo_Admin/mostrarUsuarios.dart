@@ -47,7 +47,7 @@ class _getUsersAllState extends State<getUsersAll> {
                 final usuario = snapshot.data![index];
                 return ListTile(
                   title: Text(
-                      'Nombre: ${usuario['Nombre']} ${usuario['Apellido']}'),
+                      'Nombre: ${usuario['Nombres']} ${usuario['Apellidos']}'),
                   subtitle: Text('Cédula: ${usuario['cedula']}'),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
