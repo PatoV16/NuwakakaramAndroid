@@ -16,9 +16,11 @@ class DashboardPage extends StatelessWidget {
   final AuthService authService = AuthService();
   String mensaje = '';
   var direccion = 0;
-  ProfilePage objetoBuscar = new ProfilePage();
+  ProfilePage objetoBuscar = ProfilePage();
 
   late String profileImageUrl;
+
+  DashboardPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -62,16 +64,16 @@ class DashboardPage extends StatelessWidget {
           future: objetoBuscar.buscarCedulaUsuario(Auth.uid, 'imageURL'),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator(); // Muestra un indicador de carga mientras se espera
+              return const CircularProgressIndicator(); // Muestra un indicador de carga mientras se espera
             } else if (snapshot.hasError) {
-              return Text('Error al obtener la URL de la imagen');
+              return const Text('Error al obtener la URL de la imagen');
             } else if (snapshot.hasData) {
               return CircleAvatar(
                 backgroundImage: NetworkImage(snapshot.data!),
                 radius: 10,
               );
             } else {
-              return CircleAvatar(); // O cualquier otro valor por defecto
+              return const CircleAvatar(); // O cualquier otro valor por defecto
             }
           },
         ),
@@ -230,7 +232,7 @@ class DashboardPage extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => ListaDenunciasScreen()));
+                        builder: (context) => const ListaDenunciasScreen()));
               },
               icon: const Icon(Icons.list, color: Colors.white),
             ),
@@ -246,7 +248,7 @@ class DashboardPage extends StatelessWidget {
                 //Acción al presionar el botón de inicio
                 Navigator.push(
                 context,
-                 MaterialPageRoute(builder: (context) => MyPDFScreen()),
+                 MaterialPageRoute(builder: (context) => const MyPDFScreen()),
                );
                //getCurrentPosition();
               },

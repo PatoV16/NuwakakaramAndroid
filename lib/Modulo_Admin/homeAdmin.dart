@@ -18,13 +18,13 @@ void main() {
 class DashboardPageA extends StatelessWidget {
   final AuthService authService = AuthService();
 
-  DashboardPageA({Key? key}) : super(key: key);
+  DashboardPageA({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bienvenido - Administrador'),
+        title: const Text('Bienvenido - Administrador'),
         leading: SizedBox(
           height: 40.0,
           width: 40.0,
@@ -32,7 +32,7 @@ class DashboardPageA extends StatelessWidget {
         ),
         actions: [
           PopupMenuButton(
-            icon: Icon(Icons.more_vert),
+            icon: const Icon(Icons.more_vert),
             onSelected: (value) {
               switch (value) {
                 case 'cerrar sesion':
@@ -43,13 +43,13 @@ class DashboardPageA extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => ViolenciaDeGeneroScreen()),
+                        builder: (context) => const ViolenciaDeGeneroScreen()),
                   );
                   break;
                 case 'Registrar otro Administrador':
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => RegisterAPage()),
+                    MaterialPageRoute(builder: (context) => const RegisterAPage()),
                   );
                   break;
                   
@@ -82,7 +82,7 @@ class DashboardPageA extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => getUsersAll()),
+                MaterialPageRoute(builder: (context) => const getUsersAll()),
               );
             },
             style: ElevatedButton.styleFrom(
@@ -123,7 +123,7 @@ class DashboardPageA extends StatelessWidget {
                       title: Text(denuncia['nombre']+denuncia['apellido']),
                       subtitle:
                           Text(denuncia['descripcion'] ?? 'Sin descripción'),
-                      trailing: Icon(Icons.arrow_forward),
+                      trailing: const Icon(Icons.arrow_forward),
                       onTap: () async {
               // Recupera los valores de latitud y longitud (maneja la ausencia potencial)
                             showContextMenu(context, denuncia);
@@ -147,7 +147,7 @@ class DashboardPageA extends StatelessWidget {
         content: Text(denuncia['cedula']),
         actions: <Widget>[
           CupertinoDialogAction(
-            child: Text('Ver Mapa'),
+            child: const Text('Ver Mapa'),
             onPressed: () {
               // Código para cuando se presiona "Ver Mapa"
               double? latitud = denuncia['latitud'];
@@ -174,7 +174,7 @@ class DashboardPageA extends StatelessWidget {
             },
           ),
           CupertinoDialogAction(
-            child: Text('Atender'),
+            child: const Text('Atender'),
             onPressed: () {
               
               // Código para cuando se presiona "Atender"
@@ -187,5 +187,6 @@ class DashboardPageA extends StatelessWidget {
     },
   );
 }
+
 }
 

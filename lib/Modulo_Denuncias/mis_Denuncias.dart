@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class ListaDenunciasScreen extends StatelessWidget {
+  const ListaDenunciasScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     // Obtener el UID del usuario actualmente autenticado
@@ -10,7 +12,7 @@ class ListaDenunciasScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Lista de Denuncias'),
+        title: const Text('Lista de Denuncias'),
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
@@ -19,7 +21,7 @@ class ListaDenunciasScreen extends StatelessWidget {
             .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (snapshot.hasError) {
@@ -41,7 +43,7 @@ class ListaDenunciasScreen extends StatelessWidget {
             // Aquí puedes agregar la lógica para mostrar más detalles de la denuncia
           },
         ),
-        Divider(), // Agregar un Divider después de cada ListTile
+        const Divider(), // Agregar un Divider después de cada ListTile
       ],
     );
   },
@@ -49,7 +51,7 @@ class ListaDenunciasScreen extends StatelessWidget {
 
           }
 
-          return Center(child: Text('No hay denuncias disponibles'));
+          return const Center(child: Text('No hay denuncias disponibles'));
         },
       ),
     );

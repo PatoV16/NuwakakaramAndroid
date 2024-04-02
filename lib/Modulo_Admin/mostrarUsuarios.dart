@@ -1,16 +1,17 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 FirebaseFirestore db = FirebaseFirestore.instance;
 
 void main() {
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     home: getUsersAll(),
   ));
 }
 
 class getUsersAll extends StatefulWidget {
+  const getUsersAll({super.key});
+
   @override
   _getUsersAllState createState() => _getUsersAllState();
 }
@@ -22,7 +23,7 @@ class _getUsersAllState extends State<getUsersAll> {
     List<Map<String, dynamic>> usuariosL = [];
     if (snapshot.docs.isNotEmpty) {
       for (var doc in snapshot.docs) {
-        usuariosL.add(doc.data() as Map<String, dynamic>);
+        usuariosL.add(doc.data());
       }
     }
     return usuariosL;
@@ -32,13 +33,13 @@ class _getUsersAllState extends State<getUsersAll> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Lista de Usuarios'),
+        title: const Text('Lista de Usuarios'),
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: getUsuarios(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasData) {
             return ListView.builder(
               itemCount: snapshot.data?.length,
@@ -46,13 +47,13 @@ class _getUsersAllState extends State<getUsersAll> {
                 final usuario = snapshot.data![index];
                 return ListTile(
                   title: Text(
-                      'Nombre: ${usuario['Nombres']} ${usuario['Apellidos']}'),
+                      'Nombre: ${usuario['Nombre']} ${usuario['Apellido']}'),
                   subtitle: Text('Cédula: ${usuario['cedula']}'),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       IconButton(
-                        icon: Icon(Icons.edit),
+                        icon: const Icon(Icons.edit),
                          onPressed: () async {
                             final usuario = snapshot.data![index];
     final uid = usuario['UID']; // Suponiendo que el campo UID existe
@@ -61,16 +62,16 @@ class _getUsersAllState extends State<getUsersAll> {
     final confirm = await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Confirmar deshabilitación'),
-        content: Text('¿Seguro que desea deshabilitar a este usuario?'),
+        title: const Text('Confirmar deshabilitación'),
+        content: const Text('¿Seguro que desea deshabilitar a este usuario?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: Text('Cancelar'),
+            child: const Text('Cancelar'),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: Text('Deshabilitar'),
+            child: const Text('Deshabilitar'),
           ),
         ],
       ),
@@ -83,7 +84,7 @@ class _getUsersAllState extends State<getUsersAll> {
                         },
                       ),
                       IconButton(
-                        icon: Icon(Icons.delete),
+                        icon: const Icon(Icons.delete),
                         onPressed: () async {
                             final usuario = snapshot.data![index];
     final uid = usuario['UID']; // Suponiendo que el campo UID existe
@@ -92,16 +93,16 @@ class _getUsersAllState extends State<getUsersAll> {
     final confirm = await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Confirmar la eliminación de la cuenta'),
-        content: Text('¿Seguro que desea eliminar a este usuario?'),
+        title: const Text('Confirmar la eliminación de la cuenta'),
+        content: const Text('¿Seguro que desea eliminar a este usuario?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: Text('Cancelar'),
+            child: const Text('Cancelar'),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: Text('Eliminar'),
+            child: const Text('Eliminar'),
           ),
         ],
       ),
@@ -119,7 +120,7 @@ class _getUsersAllState extends State<getUsersAll> {
               },
             );
           } else {
-            return Center(child: Text('Error al cargar los datos'));
+            return const Center(child: Text('Error al cargar los datos'));
           }
         },
       ),
@@ -172,16 +173,16 @@ Future<void> eliminarUsuario(dynamic valorCampo) async {
       });
     }
       ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Usuario eliminado correctamente')),
+      const SnackBar(content: Text('Usuario eliminado correctamente')),
     );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('No se encontraron documentos que coincidan con la consulta.')),
+      const SnackBar(content: Text('No se encontraron documentos que coincidan con la consulta.')),
     );
     }
   } catch (e) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Error al eliminar el usuario')),
+      const SnackBar(content: Text('Error al eliminar el usuario')),
     );
   }
 }

@@ -17,7 +17,7 @@ Future<bool> existeUsuario(String cedula) async {
   final snapshot = await consulta.get();
 
   // Retornar true si el documento existe, false si no
-  return snapshot?.docs?.isNotEmpty ?? false;
+  return snapshot.docs.isNotEmpty;
 }
 
 Future<String> creaeUserAuth(String correo, password) async {
@@ -43,7 +43,7 @@ Future<void> guardarDatos(String cedula, String firstName, String lastName,
       builder: (context) {
         return AlertDialog(
           title: const Text('Error al registrar el usuario'),
-          content: Text('Ya existe un usuario con la misma cédula.'),
+          content: const Text('Ya existe un usuario con la misma cédula.'),
           actions: [
             TextButton(
               onPressed: () {
@@ -80,7 +80,7 @@ Future<void> guardarDatos(String cedula, String firstName, String lastName,
     builder: (context) {
       return AlertDialog(
         title: const Text('Usuario registrado'),
-        content: Text('El usuario ha sido registrado con éxito'),
+        content: const Text('El usuario ha sido registrado con éxito'),
         actions: [
           TextButton(
             onPressed: () {

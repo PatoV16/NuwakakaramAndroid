@@ -48,6 +48,7 @@ Future<Map<String, dynamic>> obtenerDatosUsuario(
     'descripcion': descripcion,
     'UID': uid.toString(),
     'Hora': hora,
+    'estado_denuncia': 'NO ATENDIDO'
   };
   CollectionReference denuncias =
       FirebaseFirestore.instance.collection('denuncias');
@@ -64,14 +65,14 @@ Future<void> mostrarMensaje(BuildContext context, String mensaje) async {
     context: context,
     builder: (BuildContext context) {
       return CupertinoAlertDialog(
-        title: Text('Mensaje'),
+        title: const Text('Mensaje'),
         content: Text(mensaje),
         actions: <Widget>[
           CupertinoDialogAction(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Text('Aceptar'),
+            child: const Text('Aceptar'),
           ),
         ],
       );

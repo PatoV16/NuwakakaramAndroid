@@ -27,6 +27,8 @@ class LauncherUrl {
 }
 
 class MyPDFScreen extends StatefulWidget {
+  const MyPDFScreen({super.key});
+
   @override
   _MyPDFScreenState createState() => _MyPDFScreenState();
 }
@@ -41,7 +43,7 @@ class _MyPDFScreenState extends State<MyPDFScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('PDF Viewer'),
+        title: const Text('PDF Viewer'),
       ),
       body: Center(
         child: ElevatedButton(
@@ -52,10 +54,10 @@ class _MyPDFScreenState extends State<MyPDFScreen> {
             URLpdf = await obtenerURLDocumento('usuarios', aux2);
             // Muestra el PDF usando el paquete flutter_pdfview
             print(URLpdf);
-            final lanzador = new LauncherUrl(URLpdf);
+            final lanzador = LauncherUrl(URLpdf);
             lanzador.launchURL();
           },
-          child: Text('Abrir PDF'),
+          child: const Text('Abrir PDF'),
         ),
       ),
     );

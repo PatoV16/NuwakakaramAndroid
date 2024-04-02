@@ -5,12 +5,14 @@ import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 
 void main() {
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     home: PasswordRecoveryPage(),
   ));
 }
 
 class PasswordRecoveryPage extends StatefulWidget {
+  const PasswordRecoveryPage({super.key});
+
   @override
   _PasswordRecoveryPageState createState() => _PasswordRecoveryPageState();
 }
@@ -24,28 +26,28 @@ class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF7E43B1),
+        backgroundColor: const Color(0xFF7E43B1),
         shape: const ContinuousRectangleBorder(
           borderRadius: BorderRadius.vertical(
             bottom: Radius.circular(
                 20.0), // Ajusta el valor para obtener la curvatura deseada en los bordes inferiores
           ),
         ),
-        title: Text('Recuperación de Contraseña', style: TextStyle(color: Colors.white, fontWeight:  FontWeight.bold,),),
+        title: const Text('Recuperación de Contraseña', style: TextStyle(color: Colors.white, fontWeight:  FontWeight.bold,),),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: Color(0xFFAC79FDB),
+                  color: const Color(0xffac79fdb),
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 child: TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Cédula',
                     border: InputBorder.none,
                     labelStyle: TextStyle(
@@ -66,14 +68,14 @@ class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
                   },
                 ),
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               Container(
                 decoration: BoxDecoration(
-                  color: Color(0xFFAC79FDB),
+                  color: const Color(0xffac79fdb),
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 child: TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Correo',
                     border: InputBorder.none,
                     labelStyle: TextStyle(
@@ -94,7 +96,7 @@ class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
                   },
                 ),
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
@@ -104,7 +106,7 @@ class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
                     print('Correo: $_email');
                   }
                 },
-                child: Text('Recuperar Contraseña'),
+                child: const Text('Recuperar Contraseña'),
               ),
             ],
           ),
@@ -152,17 +154,17 @@ Future<bool?> confirmarCambioContrasena(BuildContext context) async {
   return await showCupertinoDialog<bool>(
     context: context,
     builder: (context) => CupertinoAlertDialog(
-      title: Text('Confirmar cambio de contraseña'),
-      content: Text('¿Estás seguro de que deseas solicitar un cambio de contraseña?'),
+      title: const Text('Confirmar cambio de contraseña'),
+      content: const Text('¿Estás seguro de que deseas solicitar un cambio de contraseña?'),
       actions: <Widget>[
         CupertinoDialogAction(
-          child: Text('Cancelar'),
+          child: const Text('Cancelar'),
           onPressed: () { 
             Navigator.pop(context, false);
             },
         ),
         CupertinoDialogAction(
-          child: Text('Solicitar cambio'),
+          child: const Text('Solicitar cambio'),
           onPressed: () {
             
           },

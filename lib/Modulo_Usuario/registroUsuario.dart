@@ -3,12 +3,14 @@ import 'package:flutter/services.dart';
 import 'logicaRegistro.dart';
 
 void main() {
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     home: RegisterPage(),
   ));
 }
 
 class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }
@@ -49,7 +51,7 @@ class _RegisterPageState extends State<RegisterPage> {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xFFAC79FDB),
+                  color: const Color(0xffac79fdb),
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 child: TextFormField(
@@ -87,7 +89,7 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(height: 10.0),
               Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xFFAC79FDB),
+                  color: const Color(0xffac79fdb),
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 child: TextFormField(
@@ -126,7 +128,7 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(height: 10.0),
               Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xFFAC79FDB),
+                  color: const Color(0xffac79fdb),
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 child: TextFormField(
@@ -162,7 +164,7 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(height: 10.0),
               Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xFFAC79FDB),
+                  color: const Color(0xffac79fdb),
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 child: TextFormField(
@@ -197,7 +199,7 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(height: 10.0),
               Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xFFAC79FDB),
+                  color: const Color(0xffac79fdb),
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 child: TextFormField(
@@ -237,7 +239,7 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(height: 10.0),
               Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xFFAC79FDB),
+                  color: const Color(0xffac79fdb),
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 child: TextFormField(
@@ -260,7 +262,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     if (value!.isEmpty) {
                       return 'Por favor, ingresa tu teléfono';
                     } else if (!RegExp(r'^0[0-9]+$').hasMatch(value)) {
-                      return 'Ingresa solo números';
+                      return 'Ingresa solo números, empezando por: 0xxxxxxxxx';
                     }
                     return null;
                   },

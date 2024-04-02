@@ -8,6 +8,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'services/firebase_options.dart';
 import 'package:nuwakakaram/logicaLogin.dart';
 import "package:nuwakakaram/services/notification_services.dart";
+import 'package:nuwakakaram/Modulo_Admin/registroAdmin.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      //home: const MyHomePage(title: 'INICIAR SESIÓN'),
+      home: const MyHomePage(title: 'INICIAR SESIÓN'),
     );
   }
 }
@@ -59,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          backgroundColor: Color(0xFF7E43B1),
+          backgroundColor: const Color(0xFF7E43B1),
           shape: const ContinuousRectangleBorder(
             borderRadius: BorderRadius.vertical(
               bottom: Radius.circular(
@@ -90,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                   Container(
                     decoration: BoxDecoration(
-                      color: const Color(0xFFAC79FDB),
+                      color: const Color(0xffac79fdb),
                       borderRadius: BorderRadius.circular(20.0),
                     ),
                     child: TextFormField(
@@ -134,7 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ), // Espacio entre el campo de cédula y contraseña
                   Container(
                     decoration: BoxDecoration(
-                      color: const Color(0xFFAC79FDB),
+                      color: const Color(0xffac79fdb),
                       borderRadius: BorderRadius.circular(20.0),
                     ),
                     child: TextFormField(
@@ -173,29 +174,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   ElevatedButton(
                     onPressed: () async {
                       String correos = await buscarDocumento(email);
-                      if (correos != null) {
-                        authService.manejoLogin(context, correos, password);
-                        clearTextField();
-                      } else {
-                        showAboutDialog(
-                          context: context,
-                          applicationName: 'NuwaKakaram',
-                          applicationVersion: '1.0.0',
-                          children: <Widget>[
-                            Text('Usuario no encontrado',
-                                style: TextStyle(color: Colors.red)),
-                            Icon(Icons.error),
-                            ElevatedButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: Text('Volver a intentar'),
-                            ),
-                          ],
-                        );
-                      }
-                    },
+                      authService.manejoLogin(context, correos, password);
+                      clearTextField();
+                                        },
                     style: ButtonStyle(
                       backgroundColor:
-                          MaterialStateProperty.all<Color>(Color(0xFFB695C0)),
+                          MaterialStateProperty.all<Color>(const Color(0xFFB695C0)),
                       foregroundColor:
                           MaterialStateProperty.all<Color>(Colors.white),
                     ),
@@ -226,7 +210,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => RegisterPage()),
+                        MaterialPageRoute(builder: (context) => const RegisterPage()),
                       );
                     },
                     child: const Text(
@@ -242,11 +226,27 @@ class _MyHomePageState extends State<MyHomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => PasswordRecoveryPage()),
+                            builder: (context) => const PasswordRecoveryPage()),
                       );
                     },
                     child: const Text(
                       '¿Olvidaste tu contraseña?',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const RegisterAPage()),
+                      );
+                    },
+                    child: const Text(
+                      'Administrador',
                       style: TextStyle(
                         color: Colors.blue,
                         fontWeight: FontWeight.bold,

@@ -93,13 +93,13 @@ class ProfilePage extends StatelessWidget {
     onPressed: () {
       // Acción al presionar el botón flotante
       uploadPDF(uid.toString(), context);
-    },
-    child: Icon(Icons.document_scanner), // Icono del botón flotante
+    }, // Icono del botón flotante
     backgroundColor: Colors.blue, // Color de fondo del botón flotante
     foregroundColor: Colors.white, // Color del icono del botón flotante
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(50.0), // Forma del botón flotante
     ),
+    child: const Icon(Icons.document_scanner),
   ),
   floatingActionButtonLocation: FloatingActionButtonLocation.endFloat, // Ubicación del botón flotante en la esquina inferior derecha
         );
@@ -234,7 +234,7 @@ bool validarTelefono(String telefono) {
       .ref()
       .child('images')
       .child(cedula)
-      .child('profilePicture_' + cedula + '.jpg');
+      .child('profilePicture_$cedula.jpg');
 
   // Muestra un cuadro de diálogo de progreso
   showDialog(
@@ -274,14 +274,14 @@ void mostrarSnackBar(String mensaje, BuildContext context) {
 
 //controlar que solo se suba una vez el archivo por cada usuario
 
-  Future<void> uploadPDF(String _uid, BuildContext context) async {
+  Future<void> uploadPDF(String uid, BuildContext context) async {
     final picker = FilePicker.platform;
     final FilePickerResult? pickedFile = await picker.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['pdf'],
     );
     String? cedula = '';
-    cedula = await buscarCedulaUsuario(_uid, 'cedula');
+    cedula = await buscarCedulaUsuario(uid, 'cedula');
 
     if (pickedFile != null) {
       final List<File> filteredFiles = pickedFile.files
@@ -297,7 +297,7 @@ void mostrarSnackBar(String mensaje, BuildContext context) {
               .ref()
               .child('PDFs')
               .child(cedula)
-              .child('documento_' + cedula + '.pdf');
+              .child('documento_$cedula.pdf');
           final uploadTask = reference.putFile(file);
 
           await uploadTask.whenComplete(() async {

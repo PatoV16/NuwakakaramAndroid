@@ -7,8 +7,8 @@ Future<List<dynamic>> getUsuarios() async {
   List usuarios = [];
   CollectionReference collectionReferenceUsuarios = db.collection('usuarios');
   QuerySnapshot queryUsuarios = await collectionReferenceUsuarios.get();
-  queryUsuarios.docs.forEach((documento) {
+  for (var documento in queryUsuarios.docs) {
     usuarios.add(documento.data);
-  });
+  }
   return usuarios;
 }

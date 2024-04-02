@@ -7,15 +7,7 @@ import 'Modulo_Usuario/home.dart';
 import 'package:nuwakakaram/main.dart';
 
 //toma la cedula del usuario, para registrar un correo y asociarlo a firebase auth
-String generarCorreoElectronico(dynamic _cedula) {
-  String correoElectronico = '';
-  // Agregar números de cedula al final del correo electrónico
-  correoElectronico += _cedula.toString();
-  // Agregar dominio al correo electrónico
-  correoElectronico += '@gmail.com';
 
-  return correoElectronico;
-}
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -78,7 +70,7 @@ class AuthService {
                   MaterialPageRoute(
                       builder: (context) =>
                           const MyHomePage(title: 'Iniciar Sesión'))),
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         ),

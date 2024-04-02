@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:nuwakakaram/logicaLogin.dart';
 
 var UID_admin = '';
 final _formKey = GlobalKey<FormState>();
@@ -12,12 +11,12 @@ void main() async {
 }
 
 void registrarDatos(
-    _firstName, _lastName, _password, _cedula, _occupation, context) async {
+    email,firstName, lastName, password, cedula, occupation, context) async {
   try {
     UserCredential userCredential =
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
-      email: generarCorreoElectronico(_cedula),
-      password: _password,
+      email: email,
+      password: password,
     );
 
     // El usuario se ha registrado exitosamente
@@ -29,14 +28,14 @@ void registrarDatos(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Registrar usuario'),
+          title: const Text('Registrar usuario'),
           content: Text('El usuario ha sido registrado con UID: ${user.uid}'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Aceptar'),
+              child: const Text('Aceptar'),
             ),
           ],
         );
@@ -48,14 +47,14 @@ void registrarDatos(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Error al registrar el usuario'),
+          title: const Text('Error al registrar el usuario'),
           content: Text('El usuario no se ha podido registrar: $error'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Aceptar'),
+              child: const Text('Aceptar'),
             ),
           ],
         );
@@ -65,11 +64,12 @@ void registrarDatos(
   try {
     // Crea un mapa con los datos a guardar en Firestore
     Map<String, dynamic> userData = {
-      'nombre': _firstName,
-      'apellido': _lastName,
-      'contraseña': _password,
-      'cédula': _cedula,
-      'ocupación': _occupation,
+      'Nombre': firstName,
+      'Apellido': lastName,
+      'contraseña': password,
+      'Correo': email,
+      'cedula': cedula,
+      'ocupación': occupation,
       'Tipo': 'admin',
       'UID': UID_admin,
     };
