@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nuwakakaram/Modulo_Usuario/pdf_view.dart';
 import 'package:nuwakakaram/logicaLogin.dart';
+import 'package:nuwakakaram/main.dart';
 import 'perfilUser.dart';
 import 'package:nuwakakaram/Modulo_Denuncias/mis_Denuncias.dart';
 import 'package:nuwakakaram/Modulo_Denuncias/guardar_Denuncia.dart';
@@ -21,12 +24,19 @@ class DashboardPage extends StatelessWidget {
   late String profileImageUrl;
 
   DashboardPage({super.key});
+  
 
   @override
   Widget build(BuildContext context) {
     //profileImageUrl = objetoBuscar.buscarCedulaUsuario(Auth.uid, 'imageURL') as String;
-    
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () async {
+        // Mostrar el diálogo de confirmación al presionar el botón de retroceso
+        await mostrarConfirmacionSalida(
+            context, '¿Seguro que desea salir?', authService);
+        return false; // Regresar false para evitar que se cierre la página automáticamente
+      },
+    child: Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: const Color(0xFF7E43B1),
@@ -240,6 +250,7 @@ class DashboardPage extends StatelessWidget {
               onPressed: () {
                 // Acción al presionar el botón de inicio
                 authService.signOut(context);
+                exit(0);
               },
               icon: const Icon(Icons.logout, color: Colors.white),
             ),
@@ -257,6 +268,7 @@ class DashboardPage extends StatelessWidget {
           ],
         ),
       ),
+    )
     );
   }
 }
@@ -315,6 +327,33 @@ Future<void> mostrarConfirmacion(
             onPressed: () {
               Navigator.of(context)
                   .pop(); // Cerrar el diálogo al presionar "Cancelar"
+            },
+            child: const Text('Cancelar'),
+          ),
+        ],
+      );
+    },
+  );
+}
+Future<void> mostrarConfirmacionSalida(BuildContext context, String mensaje, AuthService authService) async {
+  return showCupertinoDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return CupertinoAlertDialog(
+        title: const Text('¿Está seguro que desea continuar?'),
+        content: Text(mensaje),
+        actions: <Widget>[
+          CupertinoDialogAction(
+            onPressed: () async {
+              authService.signOut(context); // Aquí authService está disponible
+              // Reemplazar la ruta actual con la pantalla de inicio de sesión
+              exit(0);
+            },
+            child: const Text('Aceptar'),
+          ),
+          CupertinoDialogAction(
+            onPressed: () {
+              Navigator.of(context).pop(); // Cerrar el diálogo al presionar "Cancelar"
             },
             child: const Text('Cancelar'),
           ),

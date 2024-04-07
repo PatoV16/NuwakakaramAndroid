@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nuwakakaram/Modulo_Ubicacion/geolocator.dart';
@@ -34,15 +35,14 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'INICIAR SESIÓN'),
+      home:  MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+ // const MyHomePage({super.key, required this.title});
 
-  final String title;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -68,9 +68,9 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           centerTitle: true,
-          title: Text(
-            widget.title,
-            style: const TextStyle(
+          title: const Text(
+            'INICIAR SESIÓN',
+            style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
             ),
@@ -266,21 +266,51 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<String> buscarDocumento(String valor) async {
-    String campo = 'cedula';
-    // Obtener la referencia a la colección
-    final coleccion = FirebaseFirestore.instance.collection('usuarios');
+  String campo = 'cedula';
+  // Obtener la referencia a la colección
+  final coleccion = FirebaseFirestore.instance.collection('usuarios');
 
-    // Crear la consulta
-    final consulta = coleccion.where(campo, isEqualTo: valor);
+  // Crear la consulta
+  final consulta = coleccion.where(campo, isEqualTo: valor);
 
-    // Obtener el documento
-    final documento =
-        await consulta.get().then((snapshot) => snapshot.docs.first);
+  // Obtener el documento
+  final documento = await consulta.get().then((snapshot) {
+    if (snapshot.docs.isNotEmpty) {
+      // Si hay documentos, retornar el valor del campo 'Correo'
+      final correo = snapshot.docs.first.get('Correo');
+      print(correo);
+      return correo;
+    } else {
+      // Si no hay documentos, lanzar un mensaje de error
+      return showCupertinoDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return CupertinoAlertDialog(
+        title: const Text('El usuario no existe'),
+        actions: <Widget>[
+          CupertinoDialogAction(
+            onPressed: () async {
+              Navigator.of(context).pop(); // Cerrar el diálogo al presionar "Cancelar"
+              // Reemplazar la ruta actual con la pantalla de inicio de sesión
+            },
+            child: const Text('Volver a Ingresar'),
+          ),
+          CupertinoDialogAction(
+            onPressed: () {
+              Navigator.of(context).pop(); // Cerrar el diálogo al presionar "Cancelar"
+            },
+            child: const Text('Cancelar'),
+          ),
+        ],
+      );
+    },
+  );
+      //throw Exception('No se encontró ningún documento con la cédula proporcionada');
+    }
+  });
 
-    // Retornar el documento
-    final correo = documento.get('Correo');
-    print(correo);
-    // Retornar el valor del campo
-    return correo;
-  }
+  // Retornar el valor del campo
+  return documento;
+}
+
 }

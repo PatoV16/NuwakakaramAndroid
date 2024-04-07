@@ -88,7 +88,7 @@ Future<void> guardarDatos(String cedula, String firstName, String lastName,
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          const MyHomePage(title: 'Iniciar Sesión')));
+                           MyHomePage()));
             },
             child: const Text('Aceptar'),
           ),

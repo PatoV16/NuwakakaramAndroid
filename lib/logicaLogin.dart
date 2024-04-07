@@ -69,7 +69,7 @@ class AuthService {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          const MyHomePage(title: 'Iniciar Sesión'))),
+                           MyHomePage())),
               child: const Text('OK'),
             ),
           ],
