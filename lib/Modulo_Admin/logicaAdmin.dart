@@ -29,7 +29,7 @@ void registrarDatos(
       builder: (context) {
         return AlertDialog(
           title: const Text('Registrar usuario'),
-          content: Text('El usuario ha sido registrado con UID: ${user.uid}'),
+          content: Text('El usuario ha sido registrado con UID correctamente'),
           actions: [
             TextButton(
               onPressed: () {
@@ -72,6 +72,7 @@ void registrarDatos(
       'ocupación': occupation,
       'Tipo': 'admin',
       'UID': UID_admin,
+      'root': false,
     };
 
     // Guarda los datos en Firestore

@@ -289,24 +289,4 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
   }
-
-  bool validarCedulaEcuatoriana(String cedula) {
-    if (cedula.length != 10) {
-      return false; // La cédula debe tener 10 dígitos
-    }
-
-    int suma = 0;
-    for (int i = 0; i < 9; i++) {
-      int digito = int.parse(cedula[i]);
-      int multiplicador = (i % 2 == 0) ? 2 : 1;
-      int resultado = digito * multiplicador;
-      suma += (resultado >= 10) ? resultado - 9 : resultado;
-    }
-
-    int residuo = suma % 10;
-    int digitoVerificador = int.parse(cedula[9]);
-
-    return (residuo == 0 && digitoVerificador == 0) ||
-        (10 - residuo == digitoVerificador);
-  }
 }

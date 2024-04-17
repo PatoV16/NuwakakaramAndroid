@@ -47,6 +47,7 @@ class DashboardPageA extends StatelessWidget {
                   );
                   break;
                 case 'Registrar otro Administrador':
+                
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const RegisterAPage()),
