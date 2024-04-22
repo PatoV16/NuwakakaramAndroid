@@ -39,22 +39,15 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final AuthService authService = AuthService();
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _cedulaController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  String email = '';
-  String password = '';
   bool _obscureText = true;
    void _toggleObscureText() {
     setState(() {
       _obscureText = !_obscureText;
     });
   }
-  Future<void> _loginPressed()async {
-      String correos = await buscarDocumento(email, context).toString();
-    authService.manejoLogin(context, correos, password);
-    _emailController.clear();
-    _passwordController.clear();
-   }
+ 
                      
   @override
   Widget build(BuildContext context) {
@@ -136,7 +129,7 @@ class _MyHomePageState extends State<MyHomePage> {
         border: Border(bottom: BorderSide(color:  Color.fromRGBO(143, 148, 251, 1)))
       ),
       child: TextField(
-        controller: _emailController, // Controlador para el campo de email
+        controller: _cedulaController, // Controlador para el campo de email
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: "Cédula",
@@ -179,7 +172,13 @@ class _MyHomePageState extends State<MyHomePage> {
 	                    ),
                 
 	                    child: MaterialButton(
-                        onPressed: _loginPressed, // Llama a la función _loginPressed cuando se presiona el botón
+                        onPressed: () {
+                  // Obtener el texto del TextEditingController como String
+                  String cedula = _cedulaController.text;
+                  String contrasena = _passwordController.text;
+                  authService.manejoLogin(context, contrasena, cedula);
+                  print('Texto ingresado: $cedula');
+                }, // Llama a la función _loginPressed cuando se presiona el botón
                         child: const Center(
                           child: Text("Iniciar sesión", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
                          ),

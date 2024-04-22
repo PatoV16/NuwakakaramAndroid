@@ -126,32 +126,7 @@ class _getUsersAllState extends State<getUsersAll> {
       ),
     );
   }
-/*
-Future<void> eliminarUsuario(String UID) async {
-  try {
-    // Reemplaza "coleccion" con el nombre real de tu colección
-    final collectionRef = FirebaseFirestore.instance.collection('coleccion');
-    final docRef = collectionRef.doc(UID);
 
-    await docRef.delete();
-
-    // Actualiza la lista de usuarios localmente (opcional)
-    if (mounted) {
-      setState(() {
-        getUsuarios();
-      });
-    }
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Usuario eliminado correctamente')),
-    );
-  } catch (error) {
-    print('Error al eliminar el usuario: $error');
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Error al eliminar el usuario')),
-    );
-  }
-}*/
 
 Future<void> eliminarUsuario(dynamic valorCampo) async {
   String nombreCampo = 'UID';

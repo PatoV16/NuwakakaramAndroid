@@ -243,14 +243,7 @@ class DashboardPage extends StatelessWidget {
               },
               icon: const Icon(Icons.list, color: Colors.white),
             ),
-            IconButton(
-              onPressed: () {
-                // Acción al presionar el botón de inicio
-                authService.signOut(context);
-                exit(0);
-              },
-              icon: const Icon(Icons.logout, color: Colors.white),
-            ),
+           
             IconButton(
               onPressed: () {
                 //Acción al presionar el botón de inicio
@@ -261,6 +254,14 @@ class DashboardPage extends StatelessWidget {
                //getCurrentPosition();
               },
               icon: const Icon(Icons.file_open, color: Colors.white),
+            ),
+             IconButton(
+              onPressed: () {
+                // Acción al presionar el botón de inicio
+                authService.signOut(context);
+                exit(0);
+              },
+              icon: const Icon(Icons.logout, color: Colors.white),
             ),
           ],
         ),
