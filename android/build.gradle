@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.8.0' // Esta es la línea que deberás actualizar
+    ext.kotlin_version = '1.9.22' // Esta es la línea que deberás actualizar
     repositories {
         google()
         jcenter()

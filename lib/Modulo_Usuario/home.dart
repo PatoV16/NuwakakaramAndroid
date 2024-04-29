@@ -259,7 +259,7 @@ class DashboardPage extends StatelessWidget {
               onPressed: () {
                 // Acción al presionar el botón de inicio
                 authService.signOut(context);
-                exit(0);
+                //exit(0);
               },
               icon: const Icon(Icons.logout, color: Colors.white),
             ),

@@ -5,7 +5,36 @@ import 'package:nuwakakaram/logicaLogin.dart';
 import 'package:nuwakakaram/recuperarContra.dart';
 import 'package:animate_do/animate_do.dart';
 
+class LoadingScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // Simula una carga ficticia
+    Future.delayed(Duration(seconds: 3), () {
+      // Navega a la pantalla de inicio de sesión después de 3 segundos (puedes ajustar el tiempo según sea necesario)
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => MyHomePage()),
+      );
+    });
 
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+             Container(
+              height: 150, // Altura deseada para la imagen
+              width: 150, // Anchura deseada para la imagen
+              child: Image.asset('assets/logo.png'),
+            ),
+            SizedBox(height: 20),
+            CircularProgressIndicator(), // Barra de progreso
+          ],
+        ),
+      ),
+    );
+  }
+}
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -19,15 +48,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home:  Scaffold(
-        body: Stack(
-          children: [
-
-            MyHomePage(), // Contenido principal de tu aplicación
-            
-          ],
-        ),
-      ),
+      home:  LoadingScreen(),
     );
   }
 }
@@ -96,7 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
 	                    child: FadeInUp(duration: Duration(milliseconds: 1600), child: Container(
 	                      margin: EdgeInsets.only(top: 50),
 	                      child: Center(
-	                        child: Text("Bienvenido...", style: TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold),),
+	                        child: Text("NuwaKakaram...", style: TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold),),
 	                      ),
 	                    )),
 	                  )
@@ -136,6 +157,7 @@ class _MyHomePageState extends State<MyHomePage> {
           hintStyle: TextStyle(color: Colors.grey[700]),
           prefixIcon: Icon(Icons.person),
         ),
+        keyboardType: TextInputType.number,
       ),
     ),
     Container(

@@ -19,6 +19,9 @@ void main() async {
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp, // Locks the orientation to portrait upright
   ]);
+
+ 
+
   runApp(const MyApp());
   
 }

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:nuwakakaram/Modulo_Admin/logicaAdmin.dart';
 import 'package:nuwakakaram/Modulo_Admin/registroAdmin.dart';
 import 'package:nuwakakaram/Modulo_Admin/mostrarUsuarios.dart';
 import 'package:nuwakakaram/Modulo_Ubicacion/map_screen.dart';
@@ -47,11 +48,15 @@ class DashboardPageA extends StatelessWidget {
                   );
                   break;
                 case 'Registrar otro Administrador':
-                
-                  Navigator.push(
+                  if(isCurrentUserRoot() == true){
+                    Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const RegisterAPage()),
                   );
+                  }else{
+                    mostrarMsj(context);
+                  }
+                  
                   break;
                   
               }
@@ -190,4 +195,6 @@ class DashboardPageA extends StatelessWidget {
 }
 
 }
+
+
 

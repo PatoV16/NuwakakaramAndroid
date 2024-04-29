@@ -55,6 +55,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 child: TextFormField(
+                  keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
                     labelText: 'Cédula',
                     border: InputBorder.none,
@@ -68,6 +69,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       Icons.perm_identity,
                       color: Colors.white,
                     ),
+                    
                   ),
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
@@ -243,6 +245,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 child: TextFormField(
+                  keyboardType: TextInputType.number,
                   maxLength: 10,
                   decoration: const InputDecoration(
                     labelText: 'Teléfono',

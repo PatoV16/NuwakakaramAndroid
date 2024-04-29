@@ -90,3 +90,46 @@ void registrarDatos(
     print('Error al registrar los datos en Firestore: $error');
   }
 }
+
+Future<bool> isCurrentUserRoot() async {
+  // Obtiene el ID del usuario actualmente loggeado
+  final currentUserId = FirebaseAuth.instance.currentUser?.uid;
+
+  // Si no hay un usuario loggeado, retorna false
+  if (currentUserId == null) return false;
+
+  // Obtiene el documento del usuario en la colección de usuarios
+  final userDoc = await FirebaseFirestore.instance
+      .collection('usuarios')
+      .doc(currentUserId)
+      .get();
+
+  // Si el documento del usuario no existe, retorna false
+  if (!userDoc.exists) return false;
+
+  // Obtiene el valor del atributo 'Root' del documento del usuario
+  final isRoot = userDoc.data()?['Root'] as bool? ?? false;
+
+  // Retorna el valor del atributo 'Root'
+  return isRoot;
+}
+
+Future<void> mostrarMsj(context) async{
+  showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Error al registrar el admin'),
+          content: Text('El usuario no tiene permisos para registrar otro administrador'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Aceptar'),
+            ),
+          ],
+        );
+      },
+    );
+}

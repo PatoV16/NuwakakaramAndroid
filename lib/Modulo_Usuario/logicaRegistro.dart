@@ -35,6 +35,23 @@ Future<String> creaeUserAuth(String correo, password) async {
 //----------------------------------------------------------------
 Future<void> guardarDatos(String cedula, String firstName, String lastName,
     String correo, String password, String telefono, context) async {
+       showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return const AlertDialog(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(height: 16.0),
+                Text('Creando Usuario, porfavor espere...'),
+              ],
+            ),
+          );
+        },
+      );
+
   final firestore = FirebaseFirestore.instance;
   // Verificar si el usuario ya existe
   if (await existeUsuario(cedula) == true) {
@@ -47,7 +64,8 @@ Future<void> guardarDatos(String cedula, String firstName, String lastName,
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                //Navigator.of(context).pop();
+                 Navigator.of(context).popAndPushNamed('/');
               },
               child: const Text('Aceptar'),
             ),
@@ -89,6 +107,7 @@ Future<void> guardarDatos(String cedula, String firstName, String lastName,
                   MaterialPageRoute(
                       builder: (context) =>
                            MyHomePage()));
+                            Navigator.of(context).popAndPushNamed('/');
             },
             child: const Text('Aceptar'),
           ),
@@ -97,8 +116,8 @@ Future<void> guardarDatos(String cedula, String firstName, String lastName,
     },
   );
 }
-    
-  }
+}
+
   bool validarCedulaEcuatoriana(String cedula) {
     if (cedula.length != 10) {
       return false; // La cédula debe tener 10 dígitos

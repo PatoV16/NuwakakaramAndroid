@@ -33,10 +33,28 @@ class AuthService {
   Future<dynamic> manejoLogin(dynamic context, String password, String cedula) async
   
    {
+     showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return const AlertDialog(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(height: 16.0),
+                Text('Iniciando sesión...'),
+              ],
+            ),
+          );
+        },
+      );
+
     dynamic email = await buscarCorreo(cedula);
     final user =
         await _authService.signInWithEmailAndPassword(context, email,  password.toString());
     if (user != null) {
+     
       buscaUID(context, user.uid);
     } else {
       showDialog(
@@ -61,11 +79,34 @@ class AuthService {
 
 //cierra sesion y retorna a login page
   void signOut(context) async {
+    signOutWithConfirmation(context);
+  // Navigator.of(context).popAndPushNamed('/');
+  }
+
+Future<void> signOutWithConfirmation(context) async {
+  final shouldSignOut = await showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text('¿Estás seguro de que quieres cerrar sesión?'),
+      content: const Text('Esta acción te cerrará la sesión de la aplicación.'),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: const Text('Cancelar'),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(true),
+          child: const Text('Cerrar sesión'),
+        ),
+      ],
+    ),
+  );
+
+  if (shouldSignOut == true) {
     await _auth.signOut();
     Navigator.of(context).popAndPushNamed('/');
   }
-
-
+}
   Future<void> buscaUID(context, dynamic value) async {
     final collectionRef = FirebaseFirestore.instance.collection("usuarios");
 
