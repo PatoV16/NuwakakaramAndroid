@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nuwakakaram/Modulo_Usuario/pdf_view.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:nuwakakaram/Modulo_Admin/contactanos.dart';
 
 bool validarCorreo(String correo) {
   return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(correo);
@@ -149,5 +150,8 @@ void mostrarSnackBar(String mensaje, BuildContext context) {
     } else {
       return ''; // Devuelve una cadena vacía si no se encuentra ningún usuario con el UID proporcionado
     }
+  }
+  void llamarContactanos(){
+    ViolenciaDeGeneroScreen();
   }
 

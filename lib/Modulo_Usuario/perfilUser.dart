@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nuwakakaram/Modulo_Usuario/logicaEditarPerfilUser.dart';
+import 'package:nuwakakaram/recuperarContra.dart';
 
 
 // ignore: must_be_immutable
@@ -12,6 +13,7 @@ class ProfilePage extends StatelessWidget {
   final TextEditingController correoController = TextEditingController();
   final TextEditingController telefonoController = TextEditingController();
   final TextEditingController newcontroller = TextEditingController();
+  final TextEditingController passController = TextEditingController();
   String nuevoValor = '';
   String url = '';
 
@@ -36,21 +38,40 @@ class ProfilePage extends StatelessWidget {
         url = snapshot.data?['imageURL'] ?? '';
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: const Color(0xFF7E43B1),
-            title: const Text(
-              'Perfil',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.white),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
+  backgroundColor: const Color(0xFF7E43B1),
+  title: const Text(
+    'Perfil',
+    style: TextStyle(
+      color: Colors.white,
+      fontWeight: FontWeight.bold,
+    ),
+  ),
+  leading: IconButton(
+    icon: const Icon(Icons.arrow_back, color: Colors.white),
+    onPressed: () => Navigator.pop(context),
+  ),
+  actions: <Widget>[
+    // Add your menu button here
+    PopupMenuButton<String>(
+      onSelected: (String choice) {
+        // Handle menu item selection here
+      },
+      itemBuilder: (BuildContext context) {
+        return [
+          PopupMenuItem<String>(
+            value: 'contactanos',
+            child: Text('Contáctanos'),
+            onTap: () => llamarContactanos(),
           ),
+          PopupMenuItem<String>(
+            value: 'acercaDe',
+            child: Text('Acerca de..'),
+          ),
+        ];
+      },
+    ),
+  ],
+),
           body: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -73,15 +94,29 @@ class ProfilePage extends StatelessWidget {
                 ),
                 const SizedBox(height: 16.0),
                 Align(
-                  alignment: Alignment.bottomLeft,
+                  alignment: Alignment.center,
                   child: _buildEditableText(
                       'Correo', correo, correoController, context),
                 ),
                 Align(
-                  alignment: Alignment.bottomLeft,
+                  alignment: Alignment.center,
                   child: _buildEditableText(
                       'Teléfono', telefono, telefonoController, context),
                 ),
+                Align(
+  alignment: Alignment.bottomCenter,
+  child: TextButton(
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PasswordRecoveryPage(),
+      ),
+    );
+  },
+  child: Text('Cambiar contraseña'),
+),
+),
               ],
             ),
           ),
