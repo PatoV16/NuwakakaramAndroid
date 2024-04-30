@@ -34,7 +34,7 @@ class DashboardPageA extends StatelessWidget {
         actions: [
           PopupMenuButton(
             icon: const Icon(Icons.more_vert),
-            onSelected: (value) {
+            onSelected: (value) async{
               switch (value) {
                 case 'cerrar sesion':
                   authService.signOut(context);
@@ -48,11 +48,13 @@ class DashboardPageA extends StatelessWidget {
                   );
                   break;
                 case 'Registrar otro Administrador':
-                  if(isCurrentUserRoot() == true){
+                  String aux = await isCurrentUserRoot();
+                  if( aux == 'true'){
                     Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const RegisterAPage()),
                   );
+                  
                   }else{
                     mostrarMsj(context);
                   }

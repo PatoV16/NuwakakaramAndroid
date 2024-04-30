@@ -91,28 +91,33 @@ void registrarDatos(
   }
 }
 
-Future<bool> isCurrentUserRoot() async {
+Future<String> isCurrentUserRoot() async {
   // Obtiene el ID del usuario actualmente loggeado
   final currentUserId = FirebaseAuth.instance.currentUser?.uid;
 
   // Si no hay un usuario loggeado, retorna false
-  if (currentUserId == null) return false;
+  if (currentUserId == null) return 'false';
 
-  // Obtiene el documento del usuario en la colección de usuarios
-  final userDoc = await FirebaseFirestore.instance
-      .collection('usuarios')
-      .doc(currentUserId)
-      .get();
+  // Realiza la consulta para obtener el documento del usuario
+  print(currentUserId);
+  final userQuery = await FirebaseFirestore.instance
+    .collection('usuarios')
+    .where('UID', isEqualTo: currentUserId)
+    .get();
 
-  // Si el documento del usuario no existe, retorna false
-  if (!userDoc.exists) return false;
+  // Si no se encontró ningún documento que cumpla con el filtro, retorna false
+  if (userQuery.docs.isEmpty) return 'false';
+
+  // Obtiene el primer documento del resultado de la consulta
+  final userDoc = userQuery.docs.first;
 
   // Obtiene el valor del atributo 'Root' del documento del usuario
-  final isRoot = userDoc.data()?['Root'] as bool? ?? false;
-
+  final isRoot = userDoc.data()['Root'];
+  print(isRoot);
   // Retorna el valor del atributo 'Root'
   return isRoot;
 }
+
 
 Future<void> mostrarMsj(context) async{
   showDialog(
