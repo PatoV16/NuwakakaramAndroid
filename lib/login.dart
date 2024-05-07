@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:nuwakakaram/Modulo_Usuario/registroUsuario.dart';
 import 'package:nuwakakaram/logicaLogin.dart';
 import 'package:nuwakakaram/recuperarContra.dart';
@@ -16,8 +17,24 @@ class LoadingScreen extends StatelessWidget {
         MaterialPageRoute(builder: (context) => MyHomePage()),
       );
     });
-
-    return Scaffold(
+return WillPopScope(
+ onWillPop: () async {
+        var _backPressCount;
+        _backPressCount++;
+        if (_backPressCount == 2) {
+          // Exit the app on the second back press
+          SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+          return true; // Prevent further back navigation
+        } else {
+          // Show a snackbar on the first back press
+          final snackBar = SnackBar(
+            content: Text('Press back again to exit'),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          return false; // Allow further back navigation
+        }
+      },
+    child:Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -32,7 +49,8 @@ class LoadingScreen extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ));
+   
   }
 }
 class MyApp extends StatelessWidget {

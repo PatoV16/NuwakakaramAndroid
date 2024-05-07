@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:nuwakakaram/Modulo_Admin/logicaAdmin.dart';
@@ -48,8 +50,8 @@ class DashboardPageA extends StatelessWidget {
                   );
                   break;
                 case 'Registrar otro Administrador':
-                  String aux = await isCurrentUserRoot();
-                  if( aux == 'true'){
+                  bool aux = await isCurrentUserRoot();
+                  if( aux == true){
                     Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const RegisterAPage()),

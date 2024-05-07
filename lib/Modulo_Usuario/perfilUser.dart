@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nuwakakaram/Modulo_Usuario/logicaEditarPerfilUser.dart';
-import 'package:nuwakakaram/recuperarContra.dart';
+import 'package:nuwakakaram/recuperarContra.dart'; 
+import 'package:nuwakakaram/Modulo_Admin/contactanos.dart';
 
 
 // ignore: must_be_immutable
@@ -61,7 +62,12 @@ class ProfilePage extends StatelessWidget {
           PopupMenuItem<String>(
             value: 'contactanos',
             child: Text('Contáctanos'),
-            onTap: () => llamarContactanos(),
+            onTap: () { 
+              Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ViolenciaDeGeneroScreen()),
+            );
+              },
           ),
           PopupMenuItem<String>(
             value: 'acercaDe',

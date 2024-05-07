@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -72,7 +74,7 @@ void registrarDatos(
       'ocupación': occupation,
       'Tipo': 'admin',
       'UID': UID_admin,
-      'root': false,
+      'Root': false,
     };
 
     // Guarda los datos en Firestore
@@ -91,12 +93,12 @@ void registrarDatos(
   }
 }
 
-Future<String> isCurrentUserRoot() async {
+Future isCurrentUserRoot() async {
   // Obtiene el ID del usuario actualmente loggeado
   final currentUserId = FirebaseAuth.instance.currentUser?.uid;
 
   // Si no hay un usuario loggeado, retorna false
-  if (currentUserId == null) return 'false';
+  if (currentUserId == null) return false;
 
   // Realiza la consulta para obtener el documento del usuario
   print(currentUserId);
@@ -106,13 +108,13 @@ Future<String> isCurrentUserRoot() async {
     .get();
 
   // Si no se encontró ningún documento que cumpla con el filtro, retorna false
-  if (userQuery.docs.isEmpty) return 'false';
+  if (userQuery.docs.isEmpty) return false;
 
   // Obtiene el primer documento del resultado de la consulta
   final userDoc = userQuery.docs.first;
 
   // Obtiene el valor del atributo 'Root' del documento del usuario
-  final isRoot = userDoc.data()['Root'];
+  bool isRoot = userDoc.data()['Root'];
   print(isRoot);
   // Retorna el valor del atributo 'Root'
   return isRoot;
