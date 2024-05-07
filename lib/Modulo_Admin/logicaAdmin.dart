@@ -140,20 +140,3 @@ Future<void> mostrarMsj(context) async{
 }
 
 
-Future<void> handleAccount(String campo, String nuevoValor, uid) async {
-    
-    CollectionReference usuarios =
-        FirebaseFirestore.instance.collection('denuncias');
-    QuerySnapshot usuariosEncontrados =
-        await usuarios.where('UID', isEqualTo: uid).get();
-    if (usuariosEncontrados.docs.isNotEmpty) {
-      DocumentSnapshot usuario = usuariosEncontrados.docs.first;
-      String documentoId = usuario.id;
-
-      await usuarios.doc(documentoId).update({
-        campo: nuevoValor,
-        
-      });
-      print(uid);
-    }
-  }
