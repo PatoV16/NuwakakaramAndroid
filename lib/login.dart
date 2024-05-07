@@ -224,6 +224,7 @@ class _MyHomePageState extends State<MyHomePage> {
                          ),
                         ),
 	                  )),
+                    
 	                 GestureDetector(
                     onTap: () {
                          // Implementa aquí la lógica para el caso de olvido su contrseña
