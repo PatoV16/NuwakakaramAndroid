@@ -76,7 +76,7 @@ class _MapScreenState extends State<MapScreen> {
                       builder: (context) {
                         return Container(
                           child: const Icon(
-                            Icons.person_pin,
+                            Icons.location_on,
                             color: Colors.blueAccent,
                             size: 40,
                           ),

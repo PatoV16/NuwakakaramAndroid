@@ -2,12 +2,26 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:nuwakakaram/Modulo_Ubicacion/map_screen.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:nuwakakaram/Modulo_Ubicacion/mapaNoAtendidas.dart';
 class NoAtendidosScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+       appBar: AppBar(
         title: Text('No Atendidos'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.map),
+            onPressed: () {
+              // Aquí puedes agregar la lógica para abrir el mapa
+              // Por ejemplo, navegar a la pantalla del mapa
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ClodMapScreen()),
+              );
+            },
+          ),
+        ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

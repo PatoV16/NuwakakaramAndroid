@@ -6,7 +6,7 @@ import 'package:nuwakakaram/Modulo_Admin/mostrarUsuarios.dart';
 import 'package:nuwakakaram/logicaLogin.dart';
 import 'contactanos.dart';
 import 'package:flutter/cupertino.dart';
-//port 'package:nuwakakaram/Modulo_Ubicacion/mapaScreen.dart';
+import 'package:nuwakakaram/Modulo_Ubicacion/hotMapScreen.dart';
 import 'package:nuwakakaram/Modulo_Admin/mostrarNoAtendidos.dart';
 import 'package:nuwakakaram/Modulo_Admin/mostrarAtendidos.dart';
 
@@ -61,6 +61,13 @@ class DashboardPageA extends StatelessWidget {
                   }
                   
                   break;
+                  case 'Mostrar Reportes':
+                 Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HotMapScreen()),
+                  );                                      
+                  
+                  break;
                   
               }
             },
@@ -72,11 +79,15 @@ class DashboardPageA extends StatelessWidget {
                 ),
                 const PopupMenuItem(
                   value: 'contactanos',
-                  child: Text('Contactanos'),
+                  child: Text('Contáctanos'),
                 ),
                 const PopupMenuItem(
                   value: 'Registrar otro Administrador',
                   child: Text('Registrar otro Administrador'),
+                ),
+                const PopupMenuItem(
+                  value: 'Mostrar Reportes',
+                  child: Text('Mostrar Reportes'),
                 ),
                 
               ];
