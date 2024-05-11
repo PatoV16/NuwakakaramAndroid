@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:nuwakakaram/Modulo_Admin/mostrarNoAtendidos.dart';
 
 // ignore: constant_identifier_names
 const MAPBOX_ACCESS_TOKEN =
@@ -27,7 +28,25 @@ class _CMapScreenState extends State<ClodMapScreen> {
     // Llamar a obtenerUbicaciones() después de obtener la ubicación actual
     obtenerUbicaciones();
   }
-
+  
+void _mostrarMensaje(BuildContext context, cadena, uid) {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text("¿Está seguro que desea atender esta denuncia?"),
+      content: Text(cadena),
+      actions: [
+        TextButton(
+          child: Text("Atender"),
+          onPressed: () {
+            handleAccount(uid, context);
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    ),
+  );
+}
   Future<void> obtenerUbicaciones() async {
   // Obtener una referencia a la colección 'denuncias'
   final firestore = FirebaseFirestore.instance;
@@ -44,22 +63,35 @@ class _CMapScreenState extends State<ClodMapScreen> {
     // Obtener los campos latitud y longitud (manejar la ausencia potencial)
     double latitud = documento.get('latitud');
     double longitud = documento.get('longitud');
-
+ String nombre = documento.get('nombre');
+  String apellido = documento.get('apellido');
+  String nombreCompleto = '$nombre $apellido';
+  String uid = documento.get('UID');
     if (latitud != 0 && longitud != 0) {
       // Crear un objeto LatLng a partir de la latitud y longitud recuperadas
       final posicionMarcador = LatLng(latitud, longitud);
 
       // Opcionalmente personalizar la apariencia del marcador (considerar las preferencias del usuario)
       final marcador = Marker(
-        point: posicionMarcador,
-        builder: (context) => Container(
-          child: const Icon(
+  point: posicionMarcador,
+  builder: (context) => GestureDetector(
+    onTap: () {
+      _mostrarMensaje(context, nombreCompleto, uid); // Función para mostrar el mensaje
+    },
+    child: Stack(
+      children: [
+        Container( // Contenedor para el icono
+          child: Icon(
             Icons.location_on, // Considerar usar un icono más específico
             color: Colors.redAccent, // Considerar la preferencia del usuario para el color
             size: 40,
           ),
         ),
-      );
+      ],
+    ),
+  ),
+);
+
 
       // Agregar el marcador a la lista
       marcadores.add(marcador);
@@ -126,4 +158,35 @@ class _CMapScreenState extends State<ClodMapScreen> {
 }
 
 
- 
+ /*
+  GestureDetector(
+    onTap: () { // Función a ejecutar al tocar el marcador
+      _mostrarMensaje(context); // Ejemplo de función para mostrar el mensaje
+    },
+    child: Stack( // Mantener la estructura Stack para el icono y el texto
+      children: [
+        // ... (Icono y texto como antes)
+      ],
+    ),
+  ), 
+
+  */
+   Future<void> handleAccount( uid, BuildContext context) async {
+    
+     // Accedemos a la colección de denuncias en Firestore
+  final denunciasRef = FirebaseFirestore.instance.collection('denuncias');
+
+  // Filtramos los documentos donde 'UID' sea igual al valor especificado
+  final query = denunciasRef.where('UID', isEqualTo: uid);
+
+  // Obtenemos los documentos coincidentes
+  final querySnapshot = await query.get();
+
+  // Recorremos cada documento coincidente y actualizamos el estado
+  for (final doc in querySnapshot.docs) {
+    await doc.reference.update({
+      'estado_denuncia': 'ATENDIDO',
+    });
+  
+  }
+  }
