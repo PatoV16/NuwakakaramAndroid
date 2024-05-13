@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:nuwakakaram/Modulo_Admin/mostrarNoAtendidos.dart';
+import 'package:nuwakakaram/Modulo_Admin/homeAdmin.dart';
 
 // ignore: constant_identifier_names
 const MAPBOX_ACCESS_TOKEN =
@@ -40,7 +40,12 @@ void _mostrarMensaje(BuildContext context, cadena, uid) {
           child: Text("Atender"),
           onPressed: () {
             handleAccount(uid, context);
-            Navigator.of(context).pop();
+            Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => DashboardPageA()),
+                
+              );
+              //Navigator.of(context).popAndPushNamed('/');
           },
         ),
       ],
