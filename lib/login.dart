@@ -1,4 +1,7 @@
 
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nuwakakaram/Modulo_Usuario/registroUsuario.dart';
@@ -19,20 +22,10 @@ class LoadingScreen extends StatelessWidget {
     });
 return WillPopScope(
  onWillPop: () async {
-        var _backPressCount;
-        _backPressCount++;
-        if (_backPressCount == 2) {
-          // Exit the app on the second back press
-          SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-          return true; // Prevent further back navigation
-        } else {
-          // Show a snackbar on the first back press
-          final snackBar = SnackBar(
-            content: Text('Press back again to exit'),
-          );
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          return false; // Allow further back navigation
-        }
+       await mostrarConfirmacionSalida(
+            context, '¿Seguro que desea salir?');
+        return false; 
+        
       },
     child:Scaffold(
       body: Center(
@@ -270,4 +263,37 @@ class _MyHomePageState extends State<MyHomePage> {
       )
     );
   }
+}
+
+
+
+
+
+
+Future<void> mostrarConfirmacionSalida(BuildContext context, String mensaje) async {
+  return showCupertinoDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return CupertinoAlertDialog(
+        title: const Text('¿Está seguro que desea continuar?'),
+        content: Text(mensaje),
+        actions: <Widget>[
+          CupertinoDialogAction(
+            onPressed: () async {
+              //authService.signOut(context); // Aquí authService está disponible
+              // Reemplazar la ruta actual con la pantalla de inicio de sesión
+              exit(0);
+            },
+            child: const Text('Aceptar'),
+          ),
+          CupertinoDialogAction(
+            onPressed: () {
+              Navigator.of(context).pop(); // Cerrar el diálogo al presionar "Cancelar"
+            },
+            child: const Text('Cancelar'),
+          ),
+        ],
+      );
+    },
+  );
 }
