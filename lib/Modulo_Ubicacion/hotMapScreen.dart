@@ -6,7 +6,7 @@ import 'package:geolocator/geolocator.dart';
 
 // ignore: constant_identifier_names
 const MAPBOX_ACCESS_TOKEN =
-    'pk.eyJ1IjoicGl0bWFjIiwiYSI6ImNsY3BpeWxuczJhOTEzbnBlaW5vcnNwNzMifQ.ncTzM4bW-jpq-hUFutnR1g';
+    'pk.eyJ1IjoicGF0cmlrLXYxNiIsImEiOiJjbHhhanU4OGQxbjg0Mmtvamp5cnU0aGo0In0.6vWOIb4LSw6U65vYpXHeCg';
 
 class HotMapScreen extends StatefulWidget {
   final double latitud = 0.00012;
